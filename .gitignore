@@ -1,0 +1,6 @@
+# For OSX Devices
+.DS_Store
+
+# Pycharm
+.idea/*
+.idea

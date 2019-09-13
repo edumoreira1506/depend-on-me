@@ -4,3 +4,5 @@
 # Pycharm
 .idea/*
 .idea
+
+*.pyc

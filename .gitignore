@@ -2,9 +2,13 @@
 .DS_Store
 
 # Pycharm
-.idea/*
 .idea
+
+#VS Code
+.vscode
 
 *.pyc
 .nox/*
 env/*
+
+

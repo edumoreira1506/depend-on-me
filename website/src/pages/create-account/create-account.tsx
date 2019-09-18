@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, TextField, Button, Box, Typography, Link } from '@material-ui/core';
 import { CreateAccountPOST } from '../../models/http-requests';
 import './create-account.css'
-import { http_post, HTTP_SUCCESS } from '../../services/http-service';
+import { http_post, HTTP_SUCCESS, CREATE_ACCOUNT_END_POINT } from '../../services/http-service';
 
 /**
  * @description Props for this component. No props have been defined for this component
@@ -43,7 +43,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
       
     // function to handle creating an account from the values currently defined in state
     handleCreateAccount = () => {
-        let success = http_post('[insert-endpoint-url-here]', JSON.stringify(this.state.request_data));
+        let success = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (success.statusCode === HTTP_SUCCESS) {
             // TODO redirect 

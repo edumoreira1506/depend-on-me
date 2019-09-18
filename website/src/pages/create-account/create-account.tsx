@@ -29,6 +29,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     state: State = {
         user_data: {
             user_id:            0,
+            user_username:      "",
             user_email:         "",
             user_first_name:    "",
             user_last_name:     "",
@@ -52,7 +53,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             <div>
                 {PageContainer(
                     <div>
-                        <Typography variant='h1'>{'>\\<'}</Typography>
+                        <Typography variant='h1'>{'<\\>'}</Typography>
                         {Form(this.state.user_data, this.handleChange, this.handleCreateAccount)}
                     </div>
                 )}
@@ -101,6 +102,7 @@ function Form(state: User, handleChange: any, handleCreateAccount: any) {
                 justify="center"
             >
                 {/* field group */}
+                {Field('user_username', 'username', state.user_username, 'none', handleChange)}
                 {Field('user_email', 'email', state.user_email, 'email', handleChange)}
                 {Field('user_first_name', 'first name', state.user_first_name, 'given-name', handleChange)}
                 {Field('user_last_name', 'last name', state.user_last_name, 'family-name', handleChange)}

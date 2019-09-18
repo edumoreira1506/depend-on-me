@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { User } from '../../models/user';
 import { Grid, TextField, Button, Box, Typography, Link } from '@material-ui/core';
-
+import { CreateAccountPOST } from '../../models/http-requests';
 import './create-account.css'
 
 /**
@@ -15,7 +15,7 @@ interface Props {
  * to create a new account
  */
 interface State {
-    user_data: User;
+    request_data: CreateAccountPOST;
 };
 
 /**
@@ -27,20 +27,18 @@ export default class CreateAccountPage extends React.Component<Props, State> {
 
     // initialization of state object 
     state: State = {
-        user_data: {
-            user_id:            0,
-            user_username:      "",
-            user_email:         "",
-            user_first_name:    "",
-            user_last_name:     "",
-            user_password:      "",
-            user_tags:          []
+        request_data: {
+            request_username:   "",
+            request_email:      "",
+            request_first_name: "",
+            request_last_name:  "",
+            request_password:   "",
         }
     };
 
     // function to update state of field. bound to this component
-    handleChange = (id: keyof User) => (event: React.ChangeEvent<HTMLInputElement>) =>{
-        this.setState({user_data: {...this.state.user_data, [id]: event.target.value}});
+    handleChange = (id: keyof CreateAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) =>{
+        this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
     }
       
     // function to handle creating an account from the values currently defined in state
@@ -54,7 +52,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                 {PageContainer(
                     <div>
                         <Typography variant='h1'>{'<\\>'}</Typography>
-                        {Form(this.state.user_data, this.handleChange, this.handleCreateAccount)}
+                        {Form(this.state.request_data, this.handleChange, this.handleCreateAccount)}
                     </div>
                 )}
             </div>
@@ -91,7 +89,7 @@ function PageContainer(content: any) {
  * @param handleChange the function to handle a change from input to controls
  * @param handleCreateAccount the function used to create a new account
  */
-function Form(state: User, handleChange: any, handleCreateAccount: any) {
+function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: any) {
     return (
         <form noValidate autoComplete="off">
             <Grid
@@ -102,11 +100,11 @@ function Form(state: User, handleChange: any, handleCreateAccount: any) {
                 justify="center"
             >
                 {/* field group */}
-                {Field('user_username', 'username', state.user_username, 'none', handleChange)}
-                {Field('user_email', 'email', state.user_email, 'email', handleChange)}
-                {Field('user_first_name', 'first name', state.user_first_name, 'given-name', handleChange)}
-                {Field('user_last_name', 'last name', state.user_last_name, 'family-name', handleChange)}
-                {Field('user_password', 'password', state.user_password, 'none', handleChange)}
+                {Field('request_first_name', 'first name', state.request_first_name, 'given-name', handleChange)}
+                {Field('request_last_name', 'last name', state.request_last_name, 'family-name', handleChange)}
+                {Field('request_email', 'email', state.request_email, 'email', handleChange)}
+                {Field('request_username', 'username', state.request_username, 'none', handleChange)}
+                {Field('request_password', 'password', state.request_password, 'none', handleChange)}
 
                 {/* navigation group */}
                 {Control(
@@ -124,13 +122,13 @@ function Form(state: User, handleChange: any, handleCreateAccount: any) {
 
 /**
  * wrapper for field
- * @param field field in the user_data object to associate with this control
+ * @param field field in the request_data object to associate with this control
  * @param label text to be displayed on the control
  * @param value current value in the control
  * @param autoComplete class of autocomplete to prefil the field
  * @param handleChange function to handle when this control recieves input
  */
-function Field(field:keyof User, label:string, value:string, autoComplete:string, handleChange: any) {
+function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any) {
     return (
         <Grid item >
             <TextField 

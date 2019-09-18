@@ -7,3 +7,4 @@ export class User {
     user_password:      string = "";
     user_tags:          []     = [];
 };
+

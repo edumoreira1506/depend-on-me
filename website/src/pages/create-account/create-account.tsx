@@ -1,8 +1,9 @@
+import { Box, Button, Grid, Link, TextField, Typography } from '@material-ui/core';
 import * as React from 'react';
-import { Grid, TextField, Button, Box, Typography, Link } from '@material-ui/core';
 import { CreateAccountPOST } from '../../models/http-requests';
-import './create-account.css'
-import { http_post, HTTP_SUCCESS, CREATE_ACCOUNT_END_POINT } from '../../services/http-service';
+import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
+import './create-account.css';
+import { NOTIFICATION_STYLE_ERROR, Notification, NotificationFunctionalProps } from '../../components/notification';
 
 /**
  * @description Props for this component. No props have been defined for this component
@@ -15,7 +16,8 @@ interface Props {
  * to create a new account
  */
 interface State {
-    request_data: CreateAccountPOST;
+    request_data:       CreateAccountPOST;
+    notification_data:  NotificationFunctionalProps;
 };
 
 /**
@@ -33,6 +35,11 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             request_first_name: "",
             request_last_name:  "",
             request_password:   "",
+        },
+        notification_data: {
+            open: false, 
+            message: "",
+            on_close: () => {this.setState({notification_data: {...this.state.notification_data, open: false}})}
         }
     };
 
@@ -43,12 +50,12 @@ export default class CreateAccountPage extends React.Component<Props, State> {
       
     // function to handle creating an account from the values currently defined in state
     handleCreateAccount = () => {
-        let success = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
+        let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
-        if (success.statusCode === HTTP_SUCCESS) {
+        if (result.statusCode === HTTP_SUCCESS) {
             // TODO redirect 
         } else {
-            // TODO display error message 
+            this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }
     }
 
@@ -61,6 +68,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                         {Form(this.state.request_data, this.handleChange, this.handleCreateAccount)}
                     </div>
                 )}
+                {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
             </div>
         );
     }

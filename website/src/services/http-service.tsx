@@ -15,13 +15,13 @@ export function http_post(url: string, body: string): any {
     }).catch(err => {
         console.log('error occurred while performing the POST request to [ ' + url + '] [' + err + ']');
         // request failed, return nothing 
-        return {};
+        return {'error': 'an error has occurred'};
     });
 
     // error occurred while preforming the request
     console.log('error occurred while performing the POST request to [' + url + ']');
     // an internal error occurred return nothing 
-    return {};
+    return {'error': 'an error has occurred'};
 }
 
 // TODO http_get

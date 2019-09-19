@@ -4,6 +4,7 @@ import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
 import './create-account.css';
 import { NOTIFICATION_STYLE_ERROR, Notification, NotificationFunctionalProps } from '../../components/notification';
+import { get_all_null_fields } from '../../services/validation-service';
 
 /**
  * @description Props for this component. No props have been defined for this component
@@ -18,6 +19,7 @@ interface Props {
 interface State {
     request_data:       CreateAccountPOST;
     notification_data:  NotificationFunctionalProps;
+    highlight_fields:   (keyof CreateAccountPOST | null)[];
 };
 
 /**
@@ -30,26 +32,44 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     // initialization of state object 
     state: State = {
         request_data: {
-            request_username:   "",
-            request_email:      "",
             request_first_name: "",
             request_last_name:  "",
+            request_email:      "",
+            request_username:   "",
             request_password:   "",
         },
         notification_data: {
             open: false, 
             message: "",
             on_close: () => {this.setState({notification_data: {...this.state.notification_data, open: false}})}
-        }
+        },
+        highlight_fields: []
     };
 
     // function to update state of field. bound to this component
     handleChange = (id: keyof CreateAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) =>{
         this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
+    
+        if (event.target.value === '') {
+            this.setState({highlight_fields: this.state.highlight_fields.concat(id)});
+        } else {
+            this.setState({highlight_fields: this.state.highlight_fields.filter(function(element){return element !== id;})});
+        }
     }
       
     // function to handle creating an account from the values currently defined in state
     handleCreateAccount = () => {
+        // validate all fields are set
+        let all_null_fields = get_all_null_fields(this.state.request_data);
+        this.setState({highlight_fields: all_null_fields});
+        
+        // if there is error, notify user and skip sending the request
+        let first_null_field = all_null_fields[0];
+        if (first_null_field != null) {
+            this.setState({notification_data: {...this.state.notification_data, open: true, message: first_null_field + ' cannot be empty'}});
+            return;
+        }
+
         let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {
@@ -65,7 +85,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                 {PageContainer(
                     <div>
                         <Typography variant='h1'>{'<\\>'}</Typography>
-                        {Form(this.state.request_data, this.handleChange, this.handleCreateAccount)}
+                        {Form(this.state.request_data, this.handleChange, this.handleCreateAccount, this.state.highlight_fields)}
                     </div>
                 )}
                 {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
@@ -102,8 +122,9 @@ function PageContainer(content: any) {
  * @param state the state of the page
  * @param handleChange the function to handle a change from input to controls
  * @param handleCreateAccount the function used to create a new account
+ * @param highlight_fields the current fields that should be highlighted as an error
  */
-function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: any) {
+function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: any, highlight_fields: (keyof CreateAccountPOST | null)[]) {
     return (
         <form noValidate autoComplete="off">
             <Grid
@@ -114,11 +135,11 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
                 justify="center"
             >
                 {/* field group */}
-                {Field('request_first_name', 'first name', state.request_first_name, 'given-name', handleChange)}
-                {Field('request_last_name', 'last name', state.request_last_name, 'family-name', handleChange)}
-                {Field('request_email', 'email', state.request_email, 'email', handleChange)}
-                {Field('request_username', 'username', state.request_username, 'none', handleChange)}
-                {Field('request_password', 'password', state.request_password, 'none', handleChange)}
+                {Field('request_first_name', 'first name', state.request_first_name, 'given-name', handleChange, highlight_fields)}
+                {Field('request_last_name', 'last name', state.request_last_name, 'family-name', handleChange, highlight_fields)}
+                {Field('request_email', 'email', state.request_email, 'email', handleChange, highlight_fields)}
+                {Field('request_username', 'username', state.request_username, 'none', handleChange, highlight_fields)}
+                {Field('request_password', 'password', state.request_password, 'none', handleChange, highlight_fields)}
 
                 {/* navigation group */}
                 {Control(
@@ -141,11 +162,31 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
  * @param value current value in the control
  * @param autoComplete class of autocomplete to prefil the field
  * @param handleChange function to handle when this control recieves input
+ * @param highlight_fields the current fields that should be highlighted as an error
  */
-function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any) {
+function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any, highlight_fields: (keyof CreateAccountPOST | null)[]) {  
+    if (highlight_fields.includes(field)) {
+        return (
+            <Grid item >
+                <TextField 
+                    error
+                    type={(label === 'password' ? 'password' : 'text')}
+                    id={field}
+                    label={label}
+                    value={value}
+                    margin="normal"
+                    autoComplete={autoComplete}
+                    onChange={handleChange(field)}
+                    style={{minWidth: '20vw'}}
+                />
+            </Grid>
+        );
+    }
+    
     return (
         <Grid item >
             <TextField 
+                type={(label === 'password' ? 'password' : 'text')}
                 id={field}
                 label={label}
                 value={value}

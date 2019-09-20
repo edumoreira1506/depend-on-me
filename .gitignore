@@ -1,0 +1,12 @@
+# For OSX Devices
+.DS_Store
+
+# Pycharm
+.idea
+
+#VS Code
+.vscode
+
+*.pyc
+.nox/*
+env/*

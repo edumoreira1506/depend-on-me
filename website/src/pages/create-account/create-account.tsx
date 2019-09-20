@@ -4,7 +4,7 @@ import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
 import './create-account.css';
 import { NOTIFICATION_STYLE_ERROR, Notification, NotificationFunctionalProps } from '../../components/notification';
-import { get_all_null_fields } from '../../services/validation-service';
+import { validate_password, get_all_null_fields, password_contains_lowercase, password_contains_uppercase, password_contains_number, password_contains_symbol, password_is_min_size } from '../../services/validation-service';
 
 /**
  * @description Props for this component. No props have been defined for this component
@@ -70,6 +70,16 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             return;
         }
 
+        // validate password
+        let password_validation = validate_password(this.state.request_data.request_password, password_contains_lowercase, password_contains_uppercase, 
+            password_contains_number, password_contains_symbol, password_is_min_size);
+
+        if (!password_validation.result) {
+            this.setState({notification_data: {...this.state.notification_data, open: true, message: "password " + password_validation.message}});
+            return;
+        }
+
+        // make request
         let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {
@@ -141,7 +151,7 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
                 {Field('request_username', 'username', state.request_username, 'none', handleChange, highlight_fields)}
                 {Field('request_password', 'password', state.request_password, 'none', handleChange, highlight_fields)}
 
-                {/* navigation group */}
+                {/* control group */}
                 {Control(
                     <Button color='primary' variant='contained' fullWidth onClick={handleCreateAccount}>Create Account</Button>
                 )}
@@ -167,9 +177,28 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
 function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any, highlight_fields: (keyof CreateAccountPOST | null)[]) {  
     if (highlight_fields.includes(field)) {
         return (
+            <Box width={1}>
+                <Grid item >
+                    <TextField 
+                        error
+                        type={(label === 'password' ? 'password' : 'text')}
+                        id={field}
+                        label={label}
+                        value={value}
+                        margin="normal"
+                        autoComplete={autoComplete}
+                        onChange={handleChange(field)}
+                        fullWidth                
+                    />
+                </Grid>
+            </Box>
+        );
+    }
+    
+    return (
+        <Box width={1}>
             <Grid item >
                 <TextField 
-                    error
                     type={(label === 'password' ? 'password' : 'text')}
                     id={field}
                     label={label}
@@ -177,25 +206,10 @@ function Field(field:keyof CreateAccountPOST, label:string, value:string, autoCo
                     margin="normal"
                     autoComplete={autoComplete}
                     onChange={handleChange(field)}
-                    style={{minWidth: '20vw'}}
-                />
+                    fullWidth
+                    />
             </Grid>
-        );
-    }
-    
-    return (
-        <Grid item >
-            <TextField 
-                type={(label === 'password' ? 'password' : 'text')}
-                id={field}
-                label={label}
-                value={value}
-                margin="normal"
-                autoComplete={autoComplete}
-                onChange={handleChange(field)}
-                style={{minWidth: '20vw'}}
-            />
-        </Grid>
+        </Box>
     );
 }
 

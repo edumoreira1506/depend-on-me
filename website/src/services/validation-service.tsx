@@ -49,7 +49,7 @@ export function validate_password(password: string, ...validation_functions: ((p
  */
 export function password_contains_lowercase(password: string):password_validation_result {
     let regex = RegExp("^(?=.*[a-z])");
-    return { message: "does not contain any lowercase characters", result: (regex.exec(password) !== null) };
+    return { message: "must contain at least 1 lowercase character", result: (regex.exec(password) !== null) };
 }
 
 /**
@@ -58,7 +58,7 @@ export function password_contains_lowercase(password: string):password_validatio
  */
 export function password_contains_uppercase(password: string):password_validation_result {
     let regex = RegExp("^(?=.*[A-Z])");
-    return { message: 'does not contain any uppercase characters', result: regex.exec(password) !== null};
+    return { message: 'must contain at least 1 uppercase character', result: regex.exec(password) !== null};
 }
 
 /**
@@ -67,7 +67,7 @@ export function password_contains_uppercase(password: string):password_validatio
  */
 export function password_contains_number(password: string):password_validation_result {
     let regex = RegExp("^(?=.*[0-9])");
-    return {message: 'does not contain any numbers', result: regex.exec(password) !== null};
+    return {message: 'must contain at least 1 number', result: regex.exec(password) !== null};
 }
 
 /**
@@ -75,8 +75,8 @@ export function password_contains_number(password: string):password_validation_r
  * @param password string to be checked for symbols
  */
 export function password_contains_symbol(password: string): password_validation_result {
-    let regex = RegExp("(?=.*[!@#$%^&*-+=?<>\\\\])");
-    return {message: 'does not contain any symbols', result: regex.exec(password) !== null};
+    let regex = RegExp("(?=.*[!@#$%^&*-+=?<>\\\\/])");
+    return {message: 'must contain at least 1 symbol', result: regex.exec(password) !== null};
 }
 
 /**
@@ -85,7 +85,7 @@ export function password_contains_symbol(password: string): password_validation_
  */
 export function password_is_min_size(password: string):password_validation_result{
     let regex = RegExp("(?=.{" + MIN_PASSWORD_SIZE + ",})");
-    return {message: 'is too short', result: regex.exec(password) !== null};
+    return {message: 'must have at least ' + MIN_PASSWORD_SIZE + ' characters', result: regex.exec(password) !== null};
 }
 
 /**

@@ -1,10 +1,37 @@
 import { Box, Button, Grid, Link, TextField, Typography } from '@material-ui/core';
 import * as React from 'react';
-import { CreateAccountPOST } from '../../models/http-requests';
+import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
+import { CreateAccountPOST, CreateAccountPOSTFieldName } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
+import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, 
+    password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
 import './create-account.css';
-import { NOTIFICATION_STYLE_ERROR, Notification, NotificationFunctionalProps } from '../../components/notification';
-import { validate_password, get_all_null_fields, password_contains_lowercase, password_contains_uppercase, password_contains_number, password_contains_symbol, password_is_min_size } from '../../services/validation-service';
+
+
+/**
+ * type definition for complex type
+ */
+type NullableCreateAccountPOSTFieldArray = (keyof CreateAccountPOST| null)[];
+
+/**
+ * container for a fields id and autocamplete values
+ */
+type FieldMetadata = {
+    key:             keyof CreateAccountPOST;
+    autocomplete:   string;
+};
+
+/**
+ * definition of all the fields displayed on the create account form 
+ */
+const fields: FieldMetadata[] = [
+    {key: 'request_first_name', autocomplete: 'given_name'},
+    {key: 'request_last_name', autocomplete: 'family-name'},
+    {key: 'request_email', autocomplete: 'email'},
+    {key: 'request_username', autocomplete: 'none'},
+    {key: 'request_password', autocomplete: 'none'}
+];
+
 
 /**
  * @description Props for this component. No props have been defined for this component
@@ -19,7 +46,7 @@ interface Props {
 interface State {
     request_data:       CreateAccountPOST;
     notification_data:  NotificationFunctionalProps;
-    highlight_fields:   (keyof CreateAccountPOST | null)[];
+    invalid_fields:     NullableCreateAccountPOSTFieldArray;
 };
 
 /**
@@ -43,7 +70,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             message: "",
             on_close: () => {this.setState({notification_data: {...this.state.notification_data, open: false}})}
         },
-        highlight_fields: []
+        invalid_fields: []
     };
 
     // function to update state of field. bound to this component
@@ -51,35 +78,58 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
     
         if (event.target.value === '') {
-            this.setState({highlight_fields: this.state.highlight_fields.concat(id)});
+            this.setState({invalid_fields: this.state.invalid_fields.concat(id)});
         } else {
-            this.setState({highlight_fields: this.state.highlight_fields.filter(function(element){return element !== id;})});
+            this.setState({invalid_fields: this.state.invalid_fields.filter(function(element){return element !== id;})});
         }
     }
-      
+    
+    
     // function to handle creating an account from the values currently defined in state
     handleCreateAccount = () => {
         // validate all fields are set
+        if (!this.performInputValidation()) { return; }
+
+        // validate password
+        if (!this.performPasswordValidation()) { return; }        
+
+        // make request
+        this.performCreateAccountRequest();
+    }
+
+    /**
+     * validates that all fields have values present
+     */
+    performInputValidation = () : boolean => {
         let all_null_fields = get_all_null_fields(this.state.request_data);
-        this.setState({highlight_fields: all_null_fields});
+        this.setState({invalid_fields: all_null_fields});
         
         // if there is error, notify user and skip sending the request
         let first_null_field = all_null_fields[0];
         if (first_null_field != null) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: first_null_field + ' cannot be empty'}});
-            return;
+            this.setState({notification_data: {...this.state.notification_data, open: true, message: CreateAccountPOSTFieldName(first_null_field) + ' cannot be empty'}});
+            return false;
         }
 
-        // validate password
+        return true;
+    }
+
+    /**
+     * validates that the current password meets the requirements for a secure password 
+     */
+    performPasswordValidation = () : boolean => {
         let password_validation = validate_password(this.state.request_data.request_password, password_contains_lowercase, password_contains_uppercase, 
             password_contains_number, password_contains_symbol, password_is_min_size);
 
         if (!password_validation.result) {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: "password " + password_validation.message}});
-            return;
+            return false;
         }
 
-        // make request
+        return true;
+    }
+
+    performCreateAccountRequest = () => {
         let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {
@@ -89,13 +139,14 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         }
     }
 
+
     render() {
         return (
             <div>
                 {PageContainer(
                     <div>
                         <Typography variant='h1'>{'<\\>'}</Typography>
-                        {Form(this.state.request_data, this.handleChange, this.handleCreateAccount, this.state.highlight_fields)}
+                        {Form(this.state.request_data, this.handleChange, this.handleCreateAccount, this.state.invalid_fields)}
                     </div>
                 )}
                 {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
@@ -132,9 +183,9 @@ function PageContainer(content: any) {
  * @param state the state of the page
  * @param handleChange the function to handle a change from input to controls
  * @param handleCreateAccount the function used to create a new account
- * @param highlight_fields the current fields that should be highlighted as an error
+ * @param invalid_fields the current fields that should be highlighted as an error
  */
-function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: any, highlight_fields: (keyof CreateAccountPOST | null)[]) {
+function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: any, invalid_fields: NullableCreateAccountPOSTFieldArray) {
     return (
         <form noValidate autoComplete="off">
             <Grid
@@ -145,12 +196,10 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
                 justify="center"
             >
                 {/* field group */}
-                {Field('request_first_name', 'first name', state.request_first_name, 'given-name', handleChange, highlight_fields)}
-                {Field('request_last_name', 'last name', state.request_last_name, 'family-name', handleChange, highlight_fields)}
-                {Field('request_email', 'email', state.request_email, 'email', handleChange, highlight_fields)}
-                {Field('request_username', 'username', state.request_username, 'none', handleChange, highlight_fields)}
-                {Field('request_password', 'password', state.request_password, 'none', handleChange, highlight_fields)}
-
+                {fields.map(item => {
+                    return Field(item.key, CreateAccountPOSTFieldName(item.key), state[item.key], item.autocomplete, handleChange, invalid_fields);
+                })}
+                
                 {/* control group */}
                 {Control(
                     <Button color='primary' variant='contained' fullWidth onClick={handleCreateAccount}>Create Account</Button>
@@ -172,16 +221,16 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
  * @param value current value in the control
  * @param autoComplete class of autocomplete to prefil the field
  * @param handleChange function to handle when this control recieves input
- * @param highlight_fields the current fields that should be highlighted as an error
+ * @param invalid_fields the current fields that should be highlighted as an error
  */
-function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any, highlight_fields: (keyof CreateAccountPOST | null)[]) {  
-    if (highlight_fields.includes(field)) {
+function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any, invalid_fields: NullableCreateAccountPOSTFieldArray) {  
+    if (invalid_fields.includes(field)) {
         return (
             <Box width={1}>
                 <Grid item >
                     <TextField 
                         error
-                        type={(label === 'password' ? 'password' : 'text')}
+                        type={(field === 'request_password' ? 'password' : 'text')}
                         id={field}
                         label={label}
                         value={value}
@@ -199,7 +248,7 @@ function Field(field:keyof CreateAccountPOST, label:string, value:string, autoCo
         <Box width={1}>
             <Grid item >
                 <TextField 
-                    type={(label === 'password' ? 'password' : 'text')}
+                    type={(field === 'request_password' ? 'password' : 'text')}
                     id={field}
                     label={label}
                     value={value}
@@ -226,3 +275,4 @@ function Control(content: any) {
         </Box>
     );
 }
+

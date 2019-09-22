@@ -27,3 +27,16 @@ export interface CreateAccountPOST {
      */
     request_last_name:  string;
 }
+
+/**
+ * produces the display name of a field 
+ * @param field the field being converted to a display name
+ */
+export function CreateAccountPOSTFieldName(field: keyof CreateAccountPOST): string {
+    let parts: string[] = field.split('_');
+    let name: string = '';
+    for (let i: number = 1; i < parts.length; i++) {
+        name += parts[i] + ' ';
+    }
+    return name;
+}

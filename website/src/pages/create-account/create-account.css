@@ -1,0 +1,12 @@
+.container {
+    min-height: 100vh;
+    padding: 10vw;
+}
+
+.group-container {
+    min-width: 20vw;
+}
+
+.control-container {
+    padding-top: 2vh;
+}

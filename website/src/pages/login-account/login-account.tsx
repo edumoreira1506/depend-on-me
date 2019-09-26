@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
+import AccountsPageContainer from '../../components/accounts-page-container';
+import { Typography } from '@material-ui/core';
 
 interface Props {
 
@@ -26,7 +28,13 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     render() {
         return (
             <div> 
-                {/* TODO: add page container component here*/}
+                {AccountsPageContainer(
+                    <div>
+                        <Typography variant='h1'>{'<\\>'}</Typography>
+                        {/* TODO add form component (refactored from create account) */}
+                    </div>
+                )}
+                
                 {/* Notification Manager*/}
                 {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
             </div>

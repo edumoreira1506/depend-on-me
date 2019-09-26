@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import { CreateAccountPOST, CreateAccountPOSTFieldName } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
-import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, 
-    password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
+import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
+import AccountsPageContainer from '../../components/accounts-page-container';
 import './create-account.css';
 
 
@@ -143,7 +143,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     render() {
         return (
             <div>
-                {PageContainer(
+                {AccountsPageContainer(
                     <div>
                         <Typography variant='h1'>{'<\\>'}</Typography>
                         {Form(this.state.request_data, this.handleChange, this.handleCreateAccount, this.state.invalid_fields)}
@@ -155,29 +155,8 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     }
 }
 
-// TODO: abstract the below functional components to be public as needed
-// TODO: replace content with array, to allow for mulitple displays
-/**
- * wrapper for all content displayed on the page 
- * @param content the content being displayed on the page
- */
-function PageContainer(content: any) {
-    return (
-        <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="flex-start"
-            justify="center"
-            className={'container'}
-        >
-            <Grid item md={6} className={'group-container'}>
-                {content}
-            </Grid>
-        </Grid>
-    );
-}
-
+// // TODO: abstract the below functional components to be public as needed
+// // TODO: replace content with array, to allow for mulitple displays
 /**
  * container for all fields and controls in the account creation form
  * @param state the state of the page

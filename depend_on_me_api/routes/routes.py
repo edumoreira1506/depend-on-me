@@ -4,13 +4,14 @@ from depend_on_me_api.objs import User
 from collections import namedtuple
 import json
 
-backend = Flask(__name__, static_url_path='', static_folder='../../website/static/', template_folder="../../website/static/")
+backend = Flask(__name__, static_url_path='', static_folder='../../website/public/', template_folder="../../website/static/public/")
 login_manager = LoginManager()
 
 
-@backend.route("/")
-def root():
+@backend.route('/', methods=['GET'])
+def default():
     return "200 OK"
+
 
 
 @backend.route("/create_account", methods=['POST'])
@@ -23,14 +24,7 @@ def create_account(user: User):
 
 @backend.route("/login", methods=['POST'])
 def login():
-    # Validate
-
-    #Redirect to another page
-    return redirect(url_for("index"))
-
-@backend.route("/index", methods=['GET'])
-def index():
-    return render_template('index.html')
+    return "200 OK"
 
 @login_manager.user_loader
 def load_user(user_id):

@@ -1,11 +1,12 @@
-import { Box, Button, Grid, Link, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Link, Typography } from '@material-ui/core';
 import * as React from 'react';
+import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import { CreateAccountPOST, CreateAccountPOSTFieldName } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
 import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
-import AccountsPageContainer from '../../components/accounts-page-container';
 import './create-account.css';
+import { FormField } from '../../components/form-field';
 
 
 /**
@@ -176,7 +177,15 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
             >
                 {/* field group */}
                 {fields.map(item => {
-                    return Field(item.key, CreateAccountPOSTFieldName(item.key), state[item.key], item.autocomplete, handleChange, invalid_fields);
+                    return FormField<CreateAccountPOST>({
+                        field: item.key,
+                        label: CreateAccountPOSTFieldName(item.key),
+                        value: state[item.key],
+                        auto_complete: item.autocomplete,
+                        handle_change: handleChange,
+                        error: invalid_fields.includes(item.key),
+                        type: item.key === 'request_password' ? "password" : "text"
+                    });
                 })}
                 
                 {/* control group */}
@@ -190,54 +199,6 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
                 )}
             </Grid>
         </form>
-    );
-}
-
-/**
- * wrapper for field
- * @param field field in the request_data object to associate with this control
- * @param label text to be displayed on the control
- * @param value current value in the control
- * @param autoComplete class of autocomplete to prefil the field
- * @param handleChange function to handle when this control recieves input
- * @param invalid_fields the current fields that should be highlighted as an error
- */
-function Field(field:keyof CreateAccountPOST, label:string, value:string, autoComplete:string, handleChange: any, invalid_fields: NullableCreateAccountPOSTFieldArray) {  
-    if (invalid_fields.includes(field)) {
-        return (
-            <Box width={1}>
-                <Grid item >
-                    <TextField 
-                        error
-                        type={(field === 'request_password' ? 'password' : 'text')}
-                        id={field}
-                        label={label}
-                        value={value}
-                        margin="normal"
-                        autoComplete={autoComplete}
-                        onChange={handleChange(field)}
-                        fullWidth                
-                    />
-                </Grid>
-            </Box>
-        );
-    }
-    
-    return (
-        <Box width={1}>
-            <Grid item >
-                <TextField 
-                    type={(field === 'request_password' ? 'password' : 'text')}
-                    id={field}
-                    label={label}
-                    value={value}
-                    margin="normal"
-                    autoComplete={autoComplete}
-                    onChange={handleChange(field)}
-                    fullWidth
-                    />
-            </Grid>
-        </Box>
     );
 }
 

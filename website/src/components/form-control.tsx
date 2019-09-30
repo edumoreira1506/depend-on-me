@@ -5,16 +5,24 @@ import { padding_to_css } from '../services/utility-service';
 
 
 /**
- * renders content in a padded box
- * @param content item being rendered by this component
- * @param direction where the padding is applied
- * @param padding_size padding size to use
+ * form control parameter wrapper. defines all parameters needed to create a form control
  */
-export function FormControl(content: display_content, direction: padding_direction, padding_size: named_size) {
+export interface FormControlParams {
+    content:        display_content;
+    direction:      padding_direction;
+    padding_size:   named_size;
+}
+
+/**
+ * UI-data binding function. explicitly binds data to UI component
+ *
+ * @param params data used to create this FormControl see FormControlParams for more information.
+ */
+export function FormControl(params: FormControlParams) {
     return (
-        <Box width={1} style={{padding: get_padding_value(direction, padding_size)}}>
+        <Box width={1} style={{padding: get_padding_value(params.direction, params.padding_size)}}>
             <Grid item> 
-                {content}
+                {params.content}
             </Grid>
         </Box>
     );

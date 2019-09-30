@@ -1,4 +1,4 @@
-import { Button, Grid, Link, Typography } from '@material-ui/core';
+import { Button, Link, Typography } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
@@ -6,8 +6,8 @@ import { CreateAccountPOST, CreateAccountPOSTFieldName } from '../../models/http
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
 import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
 import './create-account.css';
-import { FormField } from '../../components/form-field';
-import { FormControl } from '../../components/form-control';
+import { FormFieldParams } from '../../components/form-field';
+import { Form } from '../../components/form';
 
 /**
  * type definition for complex type
@@ -147,7 +147,28 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                 {AccountsPageContainer(
                     <div>
                         <Typography variant='h1'>{'<\\>'}</Typography>
-                        {Form(this.state.request_data, this.handleChange, this.handleCreateAccount, this.state.invalid_fields)}
+                        {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
+                             return {
+                                field:          item.key,
+                                label:          CreateAccountPOSTFieldName(item.key),
+                                value:          this.state.request_data[item.key],
+                                auto_complete:  item.autocomplete,
+                                handle_change:  this.handleChange,
+                                error:          this.state.invalid_fields.includes(item.key),
+                                type:           item.key === 'request_password' ? 'password' : 'text'
+                            }
+                        }), [{
+                            content: <Button color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
+                            direction: 'top', 
+                            padding_size: 'small'
+                        }, {
+                            content: <Link> 
+                                        <Typography align='center'>already have an account? sign in here</Typography>
+                                   </Link>,
+                            direction:'top', 
+                            padding_size: 'small'
+                        }] 
+                        )}
                     </div>
                 )}
                 {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
@@ -155,52 +176,3 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         );
     }
 }
-
-// // TODO: abstract the below functional components to be public as needed
-// // TODO: replace content with array, to allow for mulitple displays
-/**
- * container for all fields and controls in the account creation form
- * @param state the state of the page
- * @param handleChange the function to handle a change from input to controls
- * @param handleCreateAccount the function used to create a new account
- * @param invalid_fields the current fields that should be highlighted as an error
- */
-function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: any, invalid_fields: NullableCreateAccountPOSTFieldArray) {
-    return (
-        <form noValidate autoComplete="off">
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-            >
-                {/* field group */}
-                {fields.map(item => {
-                    return FormField<CreateAccountPOST>({
-                        field: item.key,
-                        label: CreateAccountPOSTFieldName(item.key),
-                        value: state[item.key],
-                        auto_complete: item.autocomplete,
-                        handle_change: handleChange,
-                        error: invalid_fields.includes(item.key),
-                        type: item.key === 'request_password' ? "password" : "text"
-                    });
-                })}
-                
-                {/* control group */}
-                {FormControl(
-                    <Button color='primary' variant='contained' fullWidth onClick={handleCreateAccount}>Create Account</Button>
-                    , 'top', 'small'
-                )}
-                {FormControl(
-                    <Link> 
-                        <Typography align='center'>already have an account? sign in here</Typography>
-                    </Link>
-                    , 'top', 'small'
-                )}
-            </Grid>
-        </form>
-    );
-}
-

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Link, Typography } from '@material-ui/core';
+import { Button, Grid, Link, Typography } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
@@ -7,7 +7,7 @@ import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../service
 import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
 import './create-account.css';
 import { FormField } from '../../components/form-field';
-
+import { FormControl } from '../../components/form-control';
 
 /**
  * type definition for complex type
@@ -189,30 +189,18 @@ function Form(state: CreateAccountPOST, handleChange: any, handleCreateAccount: 
                 })}
                 
                 {/* control group */}
-                {Control(
+                {FormControl(
                     <Button color='primary' variant='contained' fullWidth onClick={handleCreateAccount}>Create Account</Button>
+                    , 'top', 'small'
                 )}
-                {Control(
+                {FormControl(
                     <Link> 
                         <Typography align='center'>already have an account? sign in here</Typography>
                     </Link>
+                    , 'top', 'small'
                 )}
             </Grid>
         </form>
-    );
-}
-
-/**
- * wrapper for navigation control
- * @param content content to be displayed in this control
- */
-function Control(content: any) {
-    return (
-        <Box width={1} className={'control-container'}>
-            <Grid item>
-                {content}
-            </Grid>
-        </Box>
     );
 }
 

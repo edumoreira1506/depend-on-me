@@ -35,6 +35,8 @@ export function FormControl(params: FormControlParams) {
  */
 function get_padding_value(direction: padding_direction, padding_size: named_size): string {
     switch (padding_size) {
+        case 'x-small': 
+            return padding_to_css(direction, '1vw');
         case 'small':
             return padding_to_css(direction, '2vw');
         case 'medium':

@@ -1,9 +1,16 @@
 import { remove_prefix } from "../services/utility-service";
 
 /**
+ * base type for all http requests. 
+ * 
+ * naming scheme -> all fields should follow the naming scheme <field_name> = 'request_<display_name>'
+ */
+export interface HttpRequest {}
+
+/**
  * data structure of body for the create-account POST http request
  */
-export interface CreateAccountPOST {
+export interface CreateAccountPOST extends HttpRequest {
     /**
      * username of the user. unique value used to identify the account in the database
      */
@@ -31,26 +38,12 @@ export interface CreateAccountPOST {
 }
 
 /**
- * produces the display name of a field 
- * @param field the field being converted to a display name
- */
-export function CreateAccountPOSTFieldName(field: keyof CreateAccountPOST): string {
-    // let parts: string[] = field.split('_');
-    // let name: string = '';
-    // for (let i: number = 1; i < parts.length; i++) {
-    //     name += parts[i] + ' ';
-    // }
-    // return name;
-    return remove_prefix(field, '_');
-}
-
-/**
  * data structure of body for the login-account POST http request 
  * 
  * NOTE: both <request_username> and <request_email> are optional but 
  * at least one of these values should be present for the request to be valid
  */
-export interface LoginAccountPOST {
+export interface LoginAccountPOST extends HttpRequest {
     /**
      * email used to identify the account (optional)
      */
@@ -65,18 +58,4 @@ export interface LoginAccountPOST {
      * password for the account given the account identifier (username or email)
      */
     request_password:   string;
-}
-
-/**
- * produces the display name of a field 
- * @param field the field being converted to a display name
- */
-export function LoginAccountPOSTFieldName(field: keyof LoginAccountPOST): string {
-    // let parts: string[] = field.split('_');
-    // let name: string = '';
-    // for (let i: number = 1; i < parts.length; i++) {
-    //     name += parts[i] + ' ';
-    // }
-    // return name;
-    return remove_prefix(field, '_');
 }

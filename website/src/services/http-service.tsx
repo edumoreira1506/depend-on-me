@@ -1,3 +1,7 @@
+import { HttpRequest } from "../models/http-requests";
+
+import { remove_prefix } from "./utility-service";
+
 /**
  * performs a http POST request
  * @param url the location to send the request to  
@@ -25,6 +29,17 @@ export function http_post(url: string, body: string): any {
 }
 
 // TODO http_get
+
+/**
+ * generic function to convert a field name to a display name 
+ * 
+ * NOTE: currently all http request interfaces follow the naming scheme where <field_name> is equivaent to 
+ * 'request_<display_name>'. this function is designed to extract <display_name> from <field_name>
+ * @param field_name the name being converted to a display name (text that can be displayed to the user) 
+ */
+export function GetHttpRequestDisplayName<RequestInterface extends HttpRequest>(field_name: keyof RequestInterface): string {
+    return remove_prefix(field_name.toString(), '_');
+ }
 
 /**
  * this is the value of the code returned when an http request successfully completes

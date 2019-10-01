@@ -2,8 +2,8 @@ import { Button, Link, Typography } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
-import { CreateAccountPOST, CreateAccountPOSTFieldName } from '../../models/http-requests';
-import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS } from '../../services/http-service';
+import { CreateAccountPOST } from '../../models/http-requests';
+import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS, GetHttpRequestDisplayName } from '../../services/http-service';
 import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
 import './create-account.css';
 import { FormFieldParams } from '../../components/form-field';
@@ -108,7 +108,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         // if there is error, notify user and skip sending the request
         let first_null_field = all_null_fields[0];
         if (first_null_field != null) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: CreateAccountPOSTFieldName(first_null_field) + ' cannot be empty'}});
+            this.setState({notification_data: {...this.state.notification_data, open: true, message: GetHttpRequestDisplayName<CreateAccountPOST>(first_null_field) + ' cannot be empty'}});
             return false;
         }
 
@@ -150,7 +150,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                         {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
                              return {
                                 field:          item.key,
-                                label:          CreateAccountPOSTFieldName(item.key),
+                                label:          GetHttpRequestDisplayName<CreateAccountPOST>(item.key),
                                 value:          this.state.request_data[item.key],
                                 auto_complete:  item.autocomplete,
                                 handle_change:  this.handleChange,

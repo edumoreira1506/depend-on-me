@@ -14,7 +14,7 @@ export default function AccountsPageContainer(content: display_content) {
            spacing={0}
            direction="column"
            alignItems="flex-start"
-           justify="center"
+           justify="flex-start"
            className={'accounts-page-container'}
        >
            <Grid item md={6} className={'accounts-page-subcontainer'}>

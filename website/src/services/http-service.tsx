@@ -55,3 +55,4 @@ const API_END_POINT: string = "www.ourapiendpoint.com"; // TODO change this to b
  * route of create-account endpoint on the server
  */
 export const CREATE_ACCOUNT_END_POINT: string = API_END_POINT + "/createAccount";
+export const LOGIN_ACCOUNT_END_POINT: string = API_END_POINT + "/loginAccount"

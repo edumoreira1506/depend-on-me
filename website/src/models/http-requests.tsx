@@ -50,11 +50,6 @@ export interface LoginAccountPOST extends HttpRequest {
     request_email:     string;
 
     /**
-     * username used to identify the account (optional)
-     */
-    request_username:  string;
-
-    /**
      * password for the account given the account identifier (username or email)
      */
     request_password:   string;

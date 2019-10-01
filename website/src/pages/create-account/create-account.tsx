@@ -4,7 +4,7 @@ import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS, GetHttpRequestDisplayName } from '../../services/http-service';
-import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password } from '../../services/validation-service';
+import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password, validate_email } from '../../services/validation-service';
 import './create-account.css';
 import { FormFieldParams } from '../../components/form-field';
 import { Form } from '../../components/form';
@@ -90,7 +90,10 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     // function to handle creating an account from the values currently defined in state
     handleCreateAccount = () => {
         // validate all fields are set
-        if (!this.performInputValidation()) { return; }
+        if (!this.performNullInputValidation()) { return; }
+
+        // validate email is the correct format
+        if (!this.performEmailValidation()) { return; }
 
         // validate password
         if (!this.performPasswordValidation()) { return; }        
@@ -102,7 +105,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     /**
      * validates that all fields have values present
      */
-    performInputValidation = () : boolean => {
+    performNullInputValidation = () : boolean => {
         let all_null_fields = get_all_null_fields(this.state.request_data);
         this.setState({invalid_fields: all_null_fields});
         
@@ -114,6 +117,19 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         }
 
         return true;
+    }
+
+    /**
+     * validate that the current email meets the requirements for a valid email address
+     */
+    performEmailValidation = (): boolean => {
+        let email_validation: boolean = validate_email(this.state.request_data.request_email);
+
+        if (!email_validation) {
+            this.setState({notification_data: {...this.state.notification_data, open: true, message: 'invalid email address entered'}});
+        }
+
+        return email_validation;
     }
 
     /**
@@ -135,7 +151,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {
-            // TODO redirect 
+            this.props.history.push('/home');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }

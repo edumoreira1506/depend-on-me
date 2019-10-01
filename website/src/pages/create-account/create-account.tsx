@@ -38,6 +38,7 @@ const fields: FieldMetadata[] = [
  * @description Props for this component. No props have been defined for this component
  */
 interface Props {
+    history: any
 }
 
 /**
@@ -160,13 +161,16 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                         }), [{
                             content: <Button color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
                             direction: 'top', 
-                            padding_size: 'small'
+                            padding_size: 'x-small'
                         }, {
-                            content: <Link> 
-                                        <Typography align='center'>already have an account? sign in here</Typography>
-                                   </Link>,
+                            content:  
+                                <Typography align='center'>
+                                    <Link component='button' variant='subtitle2' onClick={() => {this.props.history.push('/login')}}> 
+                                       already have an account? sign in here
+                                    </Link>
+                                </Typography>,
                             direction:'top', 
-                            padding_size: 'small'
+                            padding_size: 'x-small'
                         }] 
                         )}
                     </div>

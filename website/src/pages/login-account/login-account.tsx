@@ -17,7 +17,7 @@ type NullableLoginAccountPOSTFieldArray = (keyof LoginAccountPOST| null)[];
 
 
 interface Props {
-
+    history: any
 }
 
 interface State {
@@ -104,14 +104,18 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                             justify="space-between"
                                         >
                                                 <Grid item>
-                                                    <Link> 
-                                                        <Typography align='center' variant='subtitle2'>don't have an account? register here</Typography>
-                                                    </Link>
+                                                    <Typography align='center'>
+                                                        <Link component='button' variant='subtitle2' onClick={()=>{this.props.history.push('/createaccount')}}> 
+                                                            don't have an account? register here
+                                                        </Link>
+                                                    </Typography>
                                                 </Grid> 
                                                 <Grid item>
-                                                    <Link> 
-                                                        <Typography align='center' variant='subtitle2'>forgot password</Typography>
+                                                <Typography align='center'>
+                                                    <Link component='button' variant='subtitle2' onClick={()=>{this.props.history.push('/')}}> 
+                                                        forgot password
                                                     </Link>
+                                                </Typography>
                                                 </Grid>
                                         </Grid>,
                                     direction: 'top', 

@@ -40,3 +40,26 @@ export function CreateAccountPOSTFieldName(field: keyof CreateAccountPOST): stri
     }
     return name;
 }
+
+/**
+ * data structure of body for the login-account POST http request 
+ * 
+ * NOTE: both <request_username> and <request_email> are optional but 
+ * at least one of these values should be present for the request to be valid
+ */
+export interface LoginAccountPOST {
+    /**
+     * email used to identify the account (optional)
+     */
+    request_email?:     string;
+
+    /**
+     * username used to identify the account (optional)
+     */
+    request_username?:  string;
+
+    /**
+     * password for the account given the account identifier (username or email)
+     */
+    request_password:   string;
+}

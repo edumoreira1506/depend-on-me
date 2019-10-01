@@ -1,3 +1,5 @@
+import { remove_prefix } from "../services/utility-service";
+
 /**
  * data structure of body for the create-account POST http request
  */
@@ -33,12 +35,13 @@ export interface CreateAccountPOST {
  * @param field the field being converted to a display name
  */
 export function CreateAccountPOSTFieldName(field: keyof CreateAccountPOST): string {
-    let parts: string[] = field.split('_');
-    let name: string = '';
-    for (let i: number = 1; i < parts.length; i++) {
-        name += parts[i] + ' ';
-    }
-    return name;
+    // let parts: string[] = field.split('_');
+    // let name: string = '';
+    // for (let i: number = 1; i < parts.length; i++) {
+    //     name += parts[i] + ' ';
+    // }
+    // return name;
+    return remove_prefix(field, '_');
 }
 
 /**
@@ -62,4 +65,18 @@ export interface LoginAccountPOST {
      * password for the account given the account identifier (username or email)
      */
     request_password:   string;
+}
+
+/**
+ * produces the display name of a field 
+ * @param field the field being converted to a display name
+ */
+export function LoginAccountPOSTFieldName(field: keyof LoginAccountPOST): string {
+    // let parts: string[] = field.split('_');
+    // let name: string = '';
+    // for (let i: number = 1; i < parts.length; i++) {
+    //     name += parts[i] + ' ';
+    // }
+    // return name;
+    return remove_prefix(field, '_');
 }

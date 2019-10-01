@@ -26,3 +26,17 @@ export function padding_to_css(padding: padding_direction, value: string): strin
             return '0 0 0 0';
     }
 }
+
+/**
+ * removes all characters before the first occurrence of <delimiter> in <src>
+ * @param src the string being split up
+ * @param delimiter the character or string used to split the string 
+ */
+export function remove_prefix(src: string, delimiter: string) : string {
+    let parts: string[] = src.split(delimiter);
+    let suffix: string = '';
+    for (let i: number = 1; i < parts.length; i++) {
+        suffix += parts[i] + ' ';
+    }
+    return suffix;
+}

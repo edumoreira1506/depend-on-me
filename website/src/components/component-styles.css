@@ -1,0 +1,8 @@
+.accounts-page-container {
+    min-height: 100vh;
+    padding: 10vw;
+}
+
+.accounts-page-subcontainer {
+    min-width: 20vw;
+}

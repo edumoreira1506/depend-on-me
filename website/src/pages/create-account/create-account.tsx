@@ -4,11 +4,11 @@ import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS, GetHttpRequestDisplayName } from '../../services/http-service';
-import { get_all_null_fields, password_contains_lowercase, password_contains_number, password_contains_symbol, password_contains_uppercase, password_is_min_size, validate_password, validate_email } from '../../services/validation-service';
 import './create-account.css';
 import { FormFieldParams } from '../../components/form-field';
 import { Form } from '../../components/form';
 import { LinkControl } from '../../components/link-control';
+import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 
 /**
  * type definition for complex type
@@ -89,66 +89,21 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     
     
     // function to handle creating an account from the values currently defined in state
-    handleCreateAccount = () => {
+    private handleCreateAccount = () => {
         // validate all fields are set
-        if (!this.performNullInputValidation()) { return; }
+        if (!accounts_validate_null_input(this.state, this)){ return; }
 
         // validate email is the correct format
-        if (!this.performEmailValidation()) { return; }
+        if (!accounts_validate_email(this.state, this, 'invalid email address entered')) { return; }
 
         // validate password
-        if (!this.performPasswordValidation()) { return; }        
+        if (!accounts_validate_password(this.state, this)) { return; }
 
         // make request
         this.performCreateAccountRequest();
     }
 
-    /**
-     * validates that all fields have values present
-     */
-    performNullInputValidation = () : boolean => {
-        let all_null_fields = get_all_null_fields(this.state.request_data);
-        this.setState({invalid_fields: all_null_fields});
-        
-        // if there is error, notify user and skip sending the request
-        let first_null_field = all_null_fields[0];
-        if (first_null_field != null) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: GetHttpRequestDisplayName<CreateAccountPOST>(first_null_field) + ' cannot be empty'}});
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * validate that the current email meets the requirements for a valid email address
-     */
-    performEmailValidation = (): boolean => {
-        let email_validation: boolean = validate_email(this.state.request_data.request_email);
-
-        if (!email_validation) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: 'invalid email address entered'}});
-        }
-
-        return email_validation;
-    }
-
-    /**
-     * validates that the current password meets the requirements for a secure password 
-     */
-    performPasswordValidation = () : boolean => {
-        let password_validation = validate_password(this.state.request_data.request_password, password_contains_lowercase, password_contains_uppercase, 
-            password_contains_number, password_contains_symbol, password_is_min_size);
-
-        if (!password_validation.result) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: "password " + password_validation.message}});
-            return false;
-        }
-
-        return true;
-    }
-
-    performCreateAccountRequest = () => {
+    private performCreateAccountRequest = () => {
         let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {

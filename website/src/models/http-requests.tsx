@@ -7,6 +7,15 @@ import { remove_prefix } from "../services/utility-service";
  */
 export interface HttpRequest {}
 
+// generic request fields
+export interface HttpEmailField {
+    request_email: string;
+}
+
+export interface HttpPasswordField {
+    request_password: string;
+}
+
 /**
  * data structure of body for the create-account POST http request
  */
@@ -43,11 +52,11 @@ export interface CreateAccountPOST extends HttpRequest {
  * NOTE: both <request_username> and <request_email> are optional when sending a request but 
  * at least one of these values should be present for the request to be valid 
  */
-export interface LoginAccountPOST extends HttpRequest {
+export interface LoginAccountPOST extends HttpRequest, HttpEmailField, HttpPasswordField {
     /**
      * email used to identify the account (optional)
      */
-    request_email:     string;
+    //request_email:     string;
 
     /**
      * password for the account given the account identifier (username or email)

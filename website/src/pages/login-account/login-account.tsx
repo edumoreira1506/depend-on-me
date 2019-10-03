@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
+import { Notification, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/form';
 import { LoginAccountPOST } from '../../models/http-requests';
 import { FormFieldParams, change_event_function_1PV } from '../../components/form-field';
 import { GetHttpRequestDisplayName, http_post, LOGIN_ACCOUNT_END_POINT, HTTP_SUCCESS } from '../../services/http-service';
-import { get_all_null_fields, validate_email, validate_password, password_contains_lowercase, password_contains_uppercase, password_contains_number, password_contains_symbol, password_is_min_size } from '../../services/validation-service';
 import { LinkControl } from '../../components/link-control';
+import { RequestStateInterface, NotificationStateInterface } from '../../models/types';
+import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 
 /**
  * type definition for complex type
@@ -19,9 +20,7 @@ interface Props {
     history: any
 }
 
-interface State {
-    request_data:       LoginAccountPOST;
-    notification_data:  NotificationFunctionalProps;
+interface State extends RequestStateInterface<LoginAccountPOST>, NotificationStateInterface {
     invalid_fields:     NullableLoginAccountPOSTFieldArray;
 }
 
@@ -67,53 +66,16 @@ export default class LoginAccountPage extends React.Component<Props, State> {
 
     private handleLoginAccount = () => {
         // validate null input
-        if (!this.performNullInputValidation()) { return; }
+        if (!accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
 
         // validate email address (format)
-        if (!this.performEmailValidation()) { return; }
-        
+        if (!accounts_validate_email<LoginAccountPOST, State>(this.state, this, 'incorrect email or password entered')) { return; }
+
         // local password validate (format)
-        if (!this.performPasswordValidation()) { return; }
-        
+        if (!accounts_validate_password<LoginAccountPOST, State>(this.state, this, "incorrect email or password entered")) { return; }
+
         // make request 
         this.performLoginAccountRequest();
-    }
-
-    private performNullInputValidation = () => {
-        let all_null_fields = get_all_null_fields(this.state.request_data);
-        this.setState({invalid_fields: all_null_fields});
-        
-        // if there is error, notify user and skip sending the request
-        let first_null_field = all_null_fields[0];
-        if (first_null_field != null) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: GetHttpRequestDisplayName<LoginAccountPOST>(first_null_field) + ' cannot be empty'}});
-            return false;
-        }
-
-        return true;
-    }
-
-    private performEmailValidation = () => {
-        let email_validation: boolean = validate_email(this.state.request_data.request_email);
-
-        if (!email_validation) {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: 'invalid email address entered'}});
-        }
-
-        return email_validation;
-    }
-
-    private performPasswordValidation = () => {
-        let password_validation = validate_password(this.state.request_data.request_password, password_contains_lowercase, password_contains_uppercase, 
-            password_contains_number, password_contains_symbol, password_is_min_size);
-
-        if (!password_validation.result) {
-            // ambiguous error message because we only soft validate the password
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: "incorrect email or password entered"}});
-            return false;
-        }
-
-        return true;
     }
 
     private performLoginAccountRequest = () => {

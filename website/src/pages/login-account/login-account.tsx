@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import AccountsPageContainer from '../../components/accounts-page-container';
-import { Typography, Button, Link, Grid } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/form';
 import { LoginAccountPOST } from '../../models/http-requests';
 import { FormFieldParams, change_event_function_1PV } from '../../components/form-field';
 import { GetHttpRequestDisplayName, http_post, LOGIN_ACCOUNT_END_POINT, HTTP_SUCCESS } from '../../services/http-service';
 import { get_all_null_fields, validate_email, validate_password, password_contains_lowercase, password_contains_uppercase, password_contains_number, password_contains_symbol, password_is_min_size } from '../../services/validation-service';
+import { LinkControl } from '../../components/link-control';
 
 /**
  * type definition for complex type
@@ -125,6 +126,16 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         }
     }
 
+    // TODO refactor to service level method
+    register_redirect = () => {
+        this.props.history.push('/createaccount');
+    }
+
+     // TODO refactor to service level method
+     forgot_redirect = () => {
+        this.props.history.push('/forgotaccount');
+    }
+
     render() {
         return (
             <div> 
@@ -156,20 +167,22 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                             alignItems="stretch"
                                             justify="space-between"
                                         >
-                                                <Grid item>
-                                                    <Typography align='center'>
-                                                        <Link component='button' variant='subtitle2' onClick={()=>{this.props.history.push('/createaccount')}}> 
-                                                            don't have an account? register here
-                                                        </Link>
-                                                    </Typography>
-                                                </Grid> 
-                                                <Grid item>
-                                                <Typography align='center'>
-                                                    <Link component='button' variant='subtitle2' onClick={()=>{this.props.history.push('/forgotpassword')}}> 
-                                                        forgot password
-                                                    </Link>
-                                                </Typography>
-                                                </Grid>
+                                            <Grid item>
+                                                {LinkControl({
+                                                    text:           "don't have an account? register here",
+                                                    align:          'center',
+                                                    variant:        'subtitle2',
+                                                    handle_click:   this.register_redirect
+                                                })}
+                                            </Grid> 
+                                            <Grid item>
+                                                {LinkControl({
+                                                    text:           "forgot password",
+                                                    align:          'center',
+                                                    variant:        'subtitle2',
+                                                    handle_click:   this.forgot_redirect
+                                                })}
+                                            </Grid>
                                         </Grid>,
                                     direction: 'top', 
                                     padding_size: 'x-small'

@@ -1,4 +1,4 @@
-import { Button, Link, Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, NotificationFunctionalProps, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
@@ -8,6 +8,7 @@ import { get_all_null_fields, password_contains_lowercase, password_contains_num
 import './create-account.css';
 import { FormFieldParams } from '../../components/form-field';
 import { Form } from '../../components/form';
+import { LinkControl } from '../../components/link-control';
 
 /**
  * type definition for complex type
@@ -157,12 +158,17 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         }
     }
 
+    // TODO refactor to service level method
+    redirect = () => {
+        this.props.history.push('/login');
+    }
 
     render() {
         return (
             <div>
                 {AccountsPageContainer(
                     <div>
+                        {/* TODO refactor this into a page header */}
                         <Typography variant='h1'>{'<\\>'}</Typography>
                         {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
                              return {
@@ -175,16 +181,17 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                 type:           item.key === 'request_password' ? 'password' : 'text'
                             }
                         }), [{
-                            content: <Button color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
-                            direction: 'top', 
-                            padding_size: 'x-small'
+                            content:        <Button color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
+                            direction:      'top', 
+                            padding_size:   'x-small'
                         }, {
                             content:  
-                                <Typography align='center'>
-                                    <Link component='button' variant='subtitle2' onClick={() => {this.props.history.push('/login')}}> 
-                                       already have an account? sign in here
-                                    </Link>
-                                </Typography>,
+                                LinkControl({
+                                    text:           'already have an account? sign in here',
+                                    align:          'center',
+                                    variant:        'subtitle2',
+                                    handle_click:   this.redirect
+                                }),
                             direction:'top', 
                             padding_size: 'x-small'
                         }] 

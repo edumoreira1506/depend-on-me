@@ -5,7 +5,8 @@ export type display_content = any;
 export type padding_direction = 'left'|'right'|'top'|'bottom'|'vertical'|'horizontal'|'all'|'none';
 export type named_size = 'x-small'| 'small' | 'medium' | 'large';
 
-// TODO temporary
+export type GenericNullKeyArray<Type> = (keyof Type | undefined)[]
+
 export interface RequestStateInterface<RequestType extends HttpRequest> {
     request_data: RequestType;
 }

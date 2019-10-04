@@ -4,34 +4,24 @@ import AccountsPageContainer from '../../components/accounts-page-container';
 import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/form';
 import { LoginAccountPOST } from '../../models/http-requests';
-import { FormFieldParams, change_event_function_1PV } from '../../components/form-field';
+import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from '../../components/form-field';
 import { GetHttpRequestDisplayName, http_post, LOGIN_ACCOUNT_END_POINT, HTTP_SUCCESS } from '../../services/http-service';
 import { LinkControl } from '../../components/link-control';
-import { RequestStateInterface, NotificationStateInterface } from '../../models/types';
+import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
-
-/**
- * type definition for complex type
- */
-type NullableLoginAccountPOSTFieldArray = (keyof LoginAccountPOST| null)[];
-
+import H from 'history/index';
 
 interface Props {
-    history: any
+    history: H.History<any>;
 }
 
 interface State extends RequestStateInterface<LoginAccountPOST>, NotificationStateInterface {
-    invalid_fields:     NullableLoginAccountPOSTFieldArray;
+    invalid_fields: GenericNullKeyArray<LoginAccountPOST>;
 }
 
-type FieldMetadata = {
-    key:            keyof LoginAccountPOST;
-    auto_complete:  string;
-};
-
-const fields: FieldMetadata[] = [
-    {key: 'request_email', auto_complete: 'email'},
-    {key: 'request_password', auto_complete: 'password'}
+const fields: FormFieldMetadata<LoginAccountPOST>[] = [
+    {key: 'request_email',      auto_complete: 'email'},
+    {key: 'request_password',   auto_complete: 'current-password'}
 ];
 
 /**
@@ -54,7 +44,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     };
 
      // function to update state of field. bound to this component
-    private handleChange: change_event_function_1PV<keyof LoginAccountPOST> = (id: keyof LoginAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleChange: handle_change_function_type<keyof LoginAccountPOST> = (id: keyof LoginAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
     
         if (event.target.value === '') {
@@ -107,13 +97,12 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                         {Form(
                             fields.map<FormFieldParams<LoginAccountPOST>>(item => {
                                 return {
-                                    field: item.key,
-                                    label: GetHttpRequestDisplayName<LoginAccountPOST>(item.key),
-                                    value: this.state.request_data[item.key], 
-                                    auto_complete: item.auto_complete,
-                                    handle_change: this.handleChange, 
-                                    type: item.key === 'request_password' ? 'password' : 'text', 
-                                    error: this.state.invalid_fields.includes(item.key)
+                                    metadata:       item,
+                                    label:          GetHttpRequestDisplayName<LoginAccountPOST>(item.key),
+                                    value:          this.state.request_data[item.key], 
+                                    handle_change:  this.handleChange, 
+                                    type:           item.key === 'request_password' ? 'password' : 'text', 
+                                    error:          this.state.invalid_fields.includes(item.key)
                                 }
                             }), [
                                 {

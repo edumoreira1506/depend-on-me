@@ -5,7 +5,15 @@ import { Box, Grid, TextField } from '@material-ui/core';
  * wrapper type for the change event function 
  */
 // TODO refactor to higher level file
-export type change_event_function_1PV<ParamType> = (param: ParamType) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+export type handle_change_function_type<ParamType> = (param: ParamType) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+
+/**
+ * metadata needed to create a FormField
+ */
+export type FormFieldMetadata<Type> = {
+    key:            keyof Type;
+    auto_complete?: string;
+};
 
 /**
  * form field parameter wrapper. defines all parameters needed to create a form field
@@ -13,11 +21,10 @@ export type change_event_function_1PV<ParamType> = (param: ParamType) => (event:
  * <FieldType> the type of of the field being displayed
  */
 export interface FormFieldParams<FieldType> {
-    field:          keyof FieldType;
+    metadata:       FormFieldMetadata<FieldType>;
     label:          string;
     value:          string;
-    auto_complete:  string;
-    handle_change:  change_event_function_1PV<keyof FieldType>;
+    handle_change:  handle_change_function_type<keyof FieldType>;
     error:          boolean;
     type:           string;
 }
@@ -34,12 +41,12 @@ export function FormField<FieldType>(params: FormFieldParams<FieldType>) {
                 <TextField 
                     error={params.error}
                     type={params.type}
-                    id={params.field.toString()}
+                    id={params.metadata.key.toString()}
                     label={params.label}
                     value={params.value}
                     margin="normal"
-                    autoComplete={params.auto_complete}
-                    onChange={params.handle_change(params.field)}
+                    autoComplete={params.metadata.auto_complete}
+                    onChange={params.handle_change(params.metadata.key)}
                     fullWidth                
                 />
             </Grid>

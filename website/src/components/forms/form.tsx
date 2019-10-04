@@ -1,7 +1,7 @@
 import React from 'react';
 import {FormField, FormFieldParams} from './form-field';
 import { Grid } from '@material-ui/core';
-import { FormControlParams, FormControl } from '.././components/form-control';
+import { FormControlParams, FormControl } from './form-control';
 
 export function Form<FieldType>(fields: FormFieldParams<FieldType>[], controls: FormControlParams[]) {
     return (

@@ -6,10 +6,11 @@ import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS, GetHttpRequestDisplayName } from '../../services/http-service';
 import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';
 import { Form } from '../../components/forms/form';
-import { LinkControl, function_VA } from '../../components/link-control';
+import { LinkControl } from '../../components/link-control';
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import H from 'history/index';
+import { redirect } from '../../services/page-service';
 /**
  * definition of all the fields displayed on the create account form 
  */
@@ -98,11 +99,6 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         }
     }
 
-    // TODO refactor to service level method
-    private redirect: function_VA = () => {
-        this.props.history.push('/login');
-    }
-
     render() {
         return (
             <div>
@@ -129,7 +125,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                     text:           'already have an account? sign in here',
                                     align:          'center',
                                     variant:        'subtitle2',
-                                    handle_click:   this.redirect
+                                    handle_click:   () => redirect(this.props.history, '/login')
                                 }),
                             direction:'top', 
                             padding_size: 'x-small'

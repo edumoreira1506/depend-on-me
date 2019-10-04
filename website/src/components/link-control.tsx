@@ -7,7 +7,7 @@ import { Link } from '@material-ui/core';
 
 
 // TOOD : export to types file
-type variant_type = ThemeStyle | 'srOnly' | 'inherit';
+export type variant_type = ThemeStyle | 'srOnly' | 'inherit';
 export type function_VA = () => any;
 
 export interface LinkControlParams {

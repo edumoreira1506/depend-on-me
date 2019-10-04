@@ -10,6 +10,7 @@ import { LinkControl } from '../../components/link-control';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 import H from 'history/index';
+import { redirect } from '../../services/page-service';
 
 interface Props {
     history: H.History<any>;
@@ -78,16 +79,6 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         }
     }
 
-    // TODO refactor to service level method
-    register_redirect = () => {
-        this.props.history.push('/createaccount');
-    }
-
-     // TODO refactor to service level method
-     forgot_redirect = () => {
-        this.props.history.push('/forgotaccount');
-    }
-
     render() {
         return (
             <div> 
@@ -123,7 +114,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "don't have an account? register here",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   this.register_redirect
+                                                    handle_click:   () => redirect(this.props.history, '/createaccount')
                                                 })}
                                             </Grid> 
                                             <Grid item>
@@ -131,7 +122,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "forgot password",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   this.forgot_redirect
+                                                    handle_click:   () => redirect(this.props.history, '/forgotaccount')
                                                 })}
                                             </Grid>
                                         </Grid>,

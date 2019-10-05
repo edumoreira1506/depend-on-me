@@ -15,7 +15,7 @@ def default():
 
 
 @backend.route("/create_account", methods=['POST'])
-def create_account(user: User):
+def create_account():
     potential_user = User(id=request.json["request_username"], password=request.json["request_password"], email=request.json["request_email"],
              first_name=request.json["request_first_name"], last_name=request.json["request_last_name"])
     #Do something with user

@@ -1,6 +1,6 @@
-
 class Task():
-        # id int
+    
+        # id: int
         # title: str
         # description: str
         # dependencies: list

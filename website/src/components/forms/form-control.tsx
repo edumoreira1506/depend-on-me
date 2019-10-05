@@ -1,7 +1,7 @@
 import React from 'react';
-import { display_content, named_size, padding_direction } from '../models/types';
+import { display_content, named_size, padding_direction } from '../../models/types';
 import { Box, Grid } from '@material-ui/core';
-import { padding_to_css } from '../services/utility-service';
+import { padding_to_css } from '../../services/utility-service';
 
 
 /**

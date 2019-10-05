@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_login import LoginManager
 from depend_on_me_api.objs import User
-import json
 
 backend = Flask(
     __name__,

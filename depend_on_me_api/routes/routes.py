@@ -1,8 +1,6 @@
-from flask import Flask, request, redirect, render_template, url_for
-from flask_login import LoginManager, login_required
+from flask import Flask, request
+from flask_login import LoginManager
 from depend_on_me_api.objs import User
-from collections import namedtuple
-import json
 
 backend = Flask(
     __name__,
@@ -20,7 +18,7 @@ def default():
 
 @backend.route("/create_account", methods=["POST"])
 def create_account():
-    potential_user = User(
+    potential_user = User(  # noqa
         id=request.json["request_username"],
         password=request.json["request_password"],
         email=request.json["request_email"],

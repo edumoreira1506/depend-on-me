@@ -35,7 +35,6 @@ def default(session):
     session.run(
         "py.test",
         "--quiet",
-        "--cov=tippecanews",
         "--cov-append",
         "--cov-config=.coveragerc",
         "--cov-report=",

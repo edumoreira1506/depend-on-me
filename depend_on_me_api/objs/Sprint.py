@@ -1,4 +1,4 @@
-class Sprint():
+class Sprint:
 
     # id: int
     # name: str
@@ -7,4 +7,3 @@ class Sprint():
         self.id = id
         self.name = name
         self.tasks = tasks
-        

@@ -1,5 +1,5 @@
-class Tag():
-    
+class Tag:
+
     # id: int
     # title: str
     def __init__(self, id: int, title: str):

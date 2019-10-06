@@ -1,4 +1,4 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, Grid } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification,  NOTIFICATION_STYLE_ERROR } from '../../components/notification';
@@ -11,6 +11,8 @@ import { accounts_validate_null_input, accounts_validate_email, accounts_validat
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import H from 'history/index';
 import { redirect } from '../../services/page-service';
+import WebRoundedIcon from '@material-ui/icons/WebRounded';
+
 /**
  * definition of all the fields displayed on the create account form 
  */
@@ -104,8 +106,16 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             <div>
                 {AccountsPageContainer(
                     <div>
-                        {/* TODO refactor this into a page header */}
-                        <Typography variant='h1'>{'<\\>'}</Typography>
+                        <div style={{fontSize: '96px'}}>
+                            <Grid container alignItems='center' justify='flex-start' direction='row'>
+                                <Grid item>
+                                    <WebRoundedIcon fontSize='inherit'/>   
+                                </Grid>                   
+                                <Grid item>
+                                    <Typography variant='h4'>depend on me</Typography>                     
+                                </Grid>
+                            </Grid>
+                        </div>
                         {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
                              return {
                                 metadata:       item,

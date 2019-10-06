@@ -11,6 +11,7 @@ import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray 
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 import H from 'history/index';
 import { redirect } from '../../services/page-service';
+import WebRoundedIcon from '@material-ui/icons/WebRounded';
 
 interface Props {
     history: H.History<any>;
@@ -84,7 +85,17 @@ export default class LoginAccountPage extends React.Component<Props, State> {
             <div> 
                 {AccountsPageContainer(
                     <div>
-                        <Typography variant='h1'>{'<\\>'}</Typography>
+                        {/* <Typography variant='h1'>{'<\\>'}</Typography> */}
+                        <div style={{fontSize: '96px'}}>
+                            <Grid container alignItems='center' justify='flex-start' direction='row'>
+                                <Grid item>
+                                    <WebRoundedIcon fontSize='inherit'/>   
+                                </Grid>                   
+                                <Grid item>
+                                    <Typography variant='h4'>depend on me</Typography>                     
+                                </Grid>
+                            </Grid>
+                        </div>
                         {Form(
                             fields.map<FormFieldParams<LoginAccountPOST>>(item => {
                                 return {

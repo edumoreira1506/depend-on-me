@@ -8,6 +8,7 @@ class User(UserMixin):
     # email :str
     # first_name: str
     # last_name: str
+    # tasks: list
     def __init__(
         self,
         id: str = None,
@@ -15,7 +16,8 @@ class User(UserMixin):
         email: str = None,
         first_name: str = None,
         last_name: str = None,
-        privilege: int = None,
+        privilege: int = 0,
+        tags: list = []
     ):
         self.id = id
         self.password = password
@@ -23,6 +25,7 @@ class User(UserMixin):
         self.first_name = first_name
         self.last_name = last_name
         self.privilege = privilege
+        self.tags = tags
 
     def is_active(self):
         return True
@@ -35,3 +38,25 @@ class User(UserMixin):
 
     def get_id(self):
         return self.id
+
+    @staticmethod
+    def from_request(request):
+        return User(
+            id=request.json["request_username"],
+            password=request.json["request_password"],
+            email=request.json["request_email"],
+            first_name=request.json["request_first_name"],
+            last_name=request.json["request_last_name"],
+        )
+
+    def to_dict(self):
+        user_dict = {
+            u'id': self.id,
+            u'first_name': self.first_name,
+            u'last': self.last_name,
+            u'email': self.email,
+            u'password': self.password,
+            u'privilege': self.privilege,
+            u'tags': self.tags
+        }
+        return user_dict

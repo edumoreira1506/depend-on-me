@@ -20,8 +20,7 @@ export interface FormControlParams {
  */
 export function FormControl(params: FormControlParams) {
     return (
-        //generate a new unique key, each time this component is rendered
-        <Box width={1} key={interal_key++} style={{padding: get_padding_value(params.direction, params.padding_size)}}>
+        <Box width={1} style={{padding: get_padding_value(params.direction, params.padding_size)}}>
             <Grid item> 
                 {params.content}
             </Grid>
@@ -47,9 +46,5 @@ function get_padding_value(direction: padding_direction, padding_size: named_siz
         default:
             return padding_to_css('none', '0');
     }
-}
 
-/**
- * internal key used to identify each of the instances of this component created
- */
-let interal_key: number = 0;
+}

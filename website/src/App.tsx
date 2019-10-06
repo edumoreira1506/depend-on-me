@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
 import CreateAccountPage from './pages/accounts/create-account';
 import LoginAccountPage from './pages/accounts/login-account';
+import { HomePage } from './pages/home';
 
 // different modes to render the application for testing and development purposes
 export enum MODE { 
@@ -37,7 +38,7 @@ function Development() {
 // functionality of sub parts of the program.
 function Playground() {
   return (
-    <h1>Playground</h1>
+    <HomePage history={undefined}></HomePage>
   );
 }
 

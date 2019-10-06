@@ -23,16 +23,13 @@ def default():
 @backend.route("/create_account", methods=["POST"])
 def create_account():
     potential_user = User.from_request(request)
-    
+
     # Check if user name exists
-    if db.collection(u'users').document(potential_user.id).get().exists:
+    if db.collection(u"users").document(potential_user.id).get().exists:
         return "", status.HTTP_409_CONFLICT
 
-    doc_ref = db.collection(u'users').document(
-        potential_user.id)
-    doc_ref.set(
-        potential_user.to_dict()
-    )
+    doc_ref = db.collection(u"users").document(potential_user.id)
+    doc_ref.set(potential_user.to_dict())
 
     return "", status.HTTP_200_OK
 

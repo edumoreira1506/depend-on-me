@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_api import status
 from flask_login import LoginManager
 from depend_on_me_api.objs import User
@@ -17,7 +17,7 @@ db = firestore.Client()
 
 @backend.route("/", methods=["GET"])
 def default():
-    return "", status.HTTP_200_OK
+    return jsonify("")
 
 
 @backend.route("/create_account", methods=["POST"])
@@ -31,12 +31,12 @@ def create_account():
     doc_ref = db.collection(u"users").document(potential_user.id)
     doc_ref.set(potential_user.to_dict())
 
-    return "", status.HTTP_200_OK
+    return jsonify("")
 
 
 @backend.route("/login", methods=["POST"])
 def login():
-    return "200 OK"
+    return jsonify(True)
 
 
 @login_manager.user_loader

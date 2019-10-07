@@ -14,6 +14,14 @@ backend = Flask(
 login_manager = LoginManager()
 db = firestore.Client()
 
+def convert_input_to(class_):
+    def wrap(f):
+        def decorator(*args):
+            obj = class_.from_request(request)
+            return f(obj)
+        return decorator
+    return wrap
+
 
 @backend.route("/", methods=["GET"])
 def default():
@@ -21,9 +29,9 @@ def default():
 
 
 @backend.route("/create_account", methods=["POST"])
-def create_account():
-    potential_user = User.from_request(request)
-
+@convert_input_to(User)
+def create_account(potential_user: User):
+        
     # Check if user name exists
     if db.collection(u"users").document(potential_user.id).get().exists:
         return "", status.HTTP_409_CONFLICT

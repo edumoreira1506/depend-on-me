@@ -12,6 +12,7 @@ import { accounts_validate_null_input, accounts_validate_email, accounts_validat
 import H from 'history/index';
 import { redirect } from '../../services/page-service';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
+import { MODE, mode } from '../../App';
 
 interface Props {
     history: H.History<any>;
@@ -57,6 +58,12 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     }
 
     private handleLoginAccount = () => {
+        // temporary (for development builds only)
+        if (mode === MODE.DEVELOPMENT) {
+            redirect(this.props.history, '/home/0');
+            return;
+        }
+
         // validate null input
         if (!accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
 
@@ -74,7 +81,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         let result = http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {
-            this.props.history.push('/home');
+            this.props.history.push('/home/0');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }

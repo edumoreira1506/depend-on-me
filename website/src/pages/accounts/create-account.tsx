@@ -12,6 +12,7 @@ import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray 
 import H from 'history/index';
 import { redirect } from '../../services/page-service';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
+import { mode, MODE } from '../../App';
 
 /**
  * definition of all the fields displayed on the create account form 
@@ -78,6 +79,12 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     
     // function to handle creating an account from the values currently defined in state
     private handleCreateAccount = () => {
+         // temporary (for development builds only)
+         if (mode === MODE.DEVELOPMENT) {
+            redirect(this.props.history, '/home/0');
+            return;
+        }
+         
         // validate all fields are set
         if (!accounts_validate_null_input<CreateAccountPOST, State>(this.state, this)){ return; }
 

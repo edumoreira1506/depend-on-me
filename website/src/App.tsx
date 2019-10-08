@@ -10,8 +10,7 @@ export enum MODE {
   DEVELOPMENT, PRODUCTION, PLAYGROUND, NONE
 }
 
-// render function for the current production iteration of the website. this should be the same as development 
-// when the owner branch is not currently in development 
+// render function for the stable branch build
 function Production() {
     return (
       <Router >
@@ -22,14 +21,14 @@ function Production() {
     );
 }
 
-// render function for the current development iteration of the website. this should be the same as production 
-// when the owner branch is not currently in development
+// render function for the nightly branch build
 function Development() {
   return (
     <Router >
       <Route exact path='/' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
       <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
       <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
+      <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />
     </Router>
   );
 }
@@ -37,9 +36,7 @@ function Development() {
 // render function for incomplete experimental features. should be used for testing individual rendering and
 // functionality of sub parts of the program.
 function Playground() {
-  return (
-    <HomePage history={undefined}></HomePage>
-  );
+  return None();
 }
 
 // render function for when no app mode is defined
@@ -56,7 +53,7 @@ function None() {
 /**
  * current mode to use when rendering the website
  */
-const mode: MODE = MODE.PRODUCTION;
+export const mode: MODE = MODE.DEVELOPMENT;
 
 /**
  * renders the complete website

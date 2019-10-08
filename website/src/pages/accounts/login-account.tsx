@@ -132,7 +132,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "don't have an account? register here",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   () => redirect(this.props.history, '/createaccount')
+                                                    handle_click:   (() => redirect(this.props.history, '/createaccount'))
                                                 })}
                                             </Grid> 
                                             <Grid item>
@@ -140,7 +140,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "forgot password",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   () => redirect(this.props.history, '/forgotaccount')
+                                                    handle_click:   (() => redirect(this.props.history, '/forgotaccount'))
                                                 })}
                                             </Grid>
                                         </Grid>,

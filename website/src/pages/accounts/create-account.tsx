@@ -142,7 +142,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                     text:           'already have an account? sign in here',
                                     align:          'center',
                                     variant:        'subtitle2',
-                                    handle_click:   () => redirect(this.props.history, '/login')
+                                    handle_click:   (() => redirect(this.props.history, '/login'))
                                 }),
                             direction:'top', 
                             padding_size: 'x-small'

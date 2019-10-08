@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import CreateAccountPage from './pages/accounts/create-account';
 import LoginAccountPage from './pages/accounts/login-account';
@@ -26,12 +26,14 @@ function Production() {
 // render function for the nightly branch build
 function Development() {
   return (
-    <Router >
-      <Route exact path='/' render={(props) => <LandingPage history={props.history}></LandingPage>} />
-      <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
-      <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
-      <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />
-      <Route path='*' render={(props) => <NotFoundPage history={props.history}></NotFoundPage>} />
+    <Router>
+      <Switch >
+        <Route exact path='/' render={(props) => <LandingPage history={props.history}></LandingPage>} />
+        <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
+        <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
+        <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />
+        <Route render={(props) => <NotFoundPage history={props.history}></NotFoundPage>} />
+      </Switch>
     </Router>
   );
 }

@@ -17,26 +17,27 @@ export default class LandingPage extends React.Component<Props, State> {
         return (
             <Grid
                 container
-                spacing={8}
+                spacing={0}
                 direction="column"
                 alignItems="flex-start"
                 justify="center"
                 style={{minHeight: '100vh', padding: '10vw'}}
             >
-                <Grid item md={6} style={{minWidth: '20vw'}}>
+                <Grid item xs={6} style={{minWidth: '20vw'}}>
                     <Typography variant='h1'>depend on me
                         <Typography variant='h4'>description of depend on me</Typography>
                     </Typography>
                 </Grid>
+                <div style={{minHeight: '5vh'}}/>
                 <Grid
-                    item md={6}
+                    item xs={6}
                     container
                     spacing={4}
                     direction="row"
                     alignItems="center"
                     justify="flex-start"
                 >
-                    <Grid md={3} item>
+                    <Grid md={4} item>
                         <Button color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/login')}>login</Button>
                     </Grid>
                     <Grid lg={4} item>

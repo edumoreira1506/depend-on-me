@@ -4,6 +4,7 @@ import './App.css';
 import CreateAccountPage from './pages/accounts/create-account';
 import LoginAccountPage from './pages/accounts/login-account';
 import { HomePage } from './pages/home';
+import LandingPage from './pages/landing-page';
 
 // different modes to render the application for testing and development purposes
 export enum MODE { 
@@ -25,7 +26,7 @@ function Production() {
 function Development() {
   return (
     <Router >
-      <Route exact path='/' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
+      <Route exact path='/' render={(props) => <LandingPage history={props.history}></LandingPage>} />
       <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
       <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
       <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />

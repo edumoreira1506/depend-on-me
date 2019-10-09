@@ -115,7 +115,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                 }
                             }), [
                                 {
-                                    content: <Button color='primary' variant='contained' fullWidth onClick={this.handleLoginAccount}>Login</Button>,
+                                    content: <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={this.handleLoginAccount}>Login</Button>,
                                     direction: 'top', 
                                     padding_size: 'x-small'
                                 },{

@@ -37,7 +37,7 @@ export class NotFoundPage extends React.Component<Props, State> {
                     justify="flex-start"
                 >
                     <Grid md={3} item>
-                        <Button color='primary' variant='contained' fullWidth onClick={() => this.props.history.goBack()}>go back</Button>
+                        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={() => this.props.history.goBack()}>go back</Button>
                     </Grid>
                     
                 </Grid>

@@ -133,7 +133,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                 type:           item.key === 'request_password' ? 'password' : 'text'
                             }
                         }), [{
-                            content:        <Button color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
+                            content:        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
                             direction:      'top', 
                             padding_size:   'x-small'
                         }, {

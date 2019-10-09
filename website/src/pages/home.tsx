@@ -59,7 +59,7 @@ export class HomePage extends React.Component<Props, State> {
     render() {
         return (
             <div style={{flexGrow: 1, minHeight: '100vh', display: 'flex', flexFlow: 'column'}}>
-                <AppBar position='static'>
+                <AppBar elevation={0} position='static'>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" aria-label="menu">
                             <WebRoundedIcon onClick={()=>redirect(this.props.history, '/home/0')}/>

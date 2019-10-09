@@ -38,10 +38,10 @@ export default class LandingPage extends React.Component<Props, State> {
                     justify="flex-start"
                 >
                     <Grid xs={2} item>
-                        <Button color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/login')}>login</Button>
+                        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/login')}>login</Button>
                     </Grid>
                     <Grid md={2} item>
-                        <Button style={{minWidth: '160px'}} color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/createaccount')}>create account</Button>
+                        <Button style={{boxShadow: "none", minWidth: '160px'}} color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/createaccount')}>create account</Button>
                     </Grid>
                 </Grid>
             </Grid>

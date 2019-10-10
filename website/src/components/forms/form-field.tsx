@@ -36,7 +36,7 @@ export interface FormFieldParams<FieldType> {
  */
 export function FormField<FieldType>(params: FormFieldParams<FieldType>) {
     return (
-        <Box width={1}>
+        <Box width={1} key={params.metadata.key.toString()}>
             <Grid item >
                 <TextField 
                     error={params.error}

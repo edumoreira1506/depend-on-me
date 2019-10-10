@@ -11,6 +11,8 @@ import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray 
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 import H from 'history/index';
 import { redirect } from '../../services/page-service';
+import WebRoundedIcon from '@material-ui/icons/WebRounded';
+import { MODE, mode } from '../../App';
 
 interface Props {
     history: H.History<any>;
@@ -56,6 +58,12 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     }
 
     private handleLoginAccount = () => {
+        // temporary (for development builds only)
+        if (mode === MODE.DEVELOPMENT) {
+            redirect(this.props.history, '/home/0');
+            return;
+        }
+
         // validate null input
         if (!accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
 
@@ -73,7 +81,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         let result = http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HTTP_SUCCESS) {
-            this.props.history.push('/home');
+            this.props.history.push('/home/0');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }
@@ -84,7 +92,17 @@ export default class LoginAccountPage extends React.Component<Props, State> {
             <div> 
                 {AccountsPageContainer(
                     <div>
-                        <Typography variant='h1'>{'<\\>'}</Typography>
+                        {/* <Typography variant='h1'>{'<\\>'}</Typography> */}
+                        <div style={{fontSize: '96px'}}>
+                            <Grid container alignItems='center' justify='flex-start' direction='row'>
+                                <Grid item>
+                                    <WebRoundedIcon fontSize='inherit'/>   
+                                </Grid>                   
+                                <Grid item>
+                                    <Typography variant='h4'>depend on me</Typography>                     
+                                </Grid>
+                            </Grid>
+                        </div>
                         {Form(
                             fields.map<FormFieldParams<LoginAccountPOST>>(item => {
                                 return {
@@ -97,7 +115,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                 }
                             }), [
                                 {
-                                    content: <Button color='primary' variant='contained' fullWidth onClick={this.handleLoginAccount}>Login</Button>,
+                                    content: <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={this.handleLoginAccount}>Login</Button>,
                                     direction: 'top', 
                                     padding_size: 'x-small'
                                 },{
@@ -114,7 +132,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "don't have an account? register here",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   () => redirect(this.props.history, '/createaccount')
+                                                    handle_click:   (() => redirect(this.props.history, '/createaccount'))
                                                 })}
                                             </Grid> 
                                             <Grid item>
@@ -122,7 +140,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "forgot password",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   () => redirect(this.props.history, '/forgotaccount')
+                                                    handle_click:   (() => redirect(this.props.history, '/forgotaccount'))
                                                 })}
                                             </Grid>
                                         </Grid>,

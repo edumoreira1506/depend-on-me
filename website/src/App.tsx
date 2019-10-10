@@ -1,17 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import CreateAccountPage from './pages/accounts/create-account';
 import LoginAccountPage from './pages/accounts/login-account';
 
+import { HomePage } from './pages/home';
+import LandingPage from './pages/landing-page';
+import { NotFoundPage } from './pages/not-found';
 
 // different modes to render the application for testing and development purposes
 export enum MODE { 
   DEVELOPMENT, PRODUCTION, PLAYGROUND, NONE
 }
 
-// render function for the current production iteration of the website. this should be the same as development 
-// when the owner branch is not currently in development 
+// render function for the stable branch build
 function Production() {
     return (
       <Router >
@@ -22,14 +24,17 @@ function Production() {
     );
 }
 
-// render function for the current development iteration of the website. this should be the same as production 
-// when the owner branch is not currently in development
+// render function for the nightly branch build
 function Development() {
   return (
-    <Router >
-      <Route exact path='/' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
-      <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
-      <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
+    <Router>
+      <Switch >
+        <Route exact path='/' render={(props) => <LandingPage history={props.history}></LandingPage>} />
+        <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
+        <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
+        <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />
+        <Route render={(props) => <NotFoundPage history={props.history}></NotFoundPage>} />
+      </Switch>
     </Router>
   );
 }
@@ -37,9 +42,7 @@ function Development() {
 // render function for incomplete experimental features. should be used for testing individual rendering and
 // functionality of sub parts of the program.
 function Playground() {
-  return (
-    <HomePage history={undefined}></HomePage>
-  );
+  return None();
 }
 
 // render function for when no app mode is defined
@@ -56,7 +59,7 @@ function None() {
 /**
  * current mode to use when rendering the website
  */
-const mode: MODE = MODE.PRODUCTION;
+export const mode: MODE = MODE.DEVELOPMENT;
 
 /**
  * renders the complete website

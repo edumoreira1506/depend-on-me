@@ -1,4 +1,4 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, Grid } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification,  NOTIFICATION_STYLE_ERROR } from '../../components/notification';
@@ -11,6 +11,9 @@ import { accounts_validate_null_input, accounts_validate_email, accounts_validat
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import H from 'history/index';
 import { redirect } from '../../services/page-service';
+import WebRoundedIcon from '@material-ui/icons/WebRounded';
+import { mode, MODE } from '../../App';
+
 /**
  * definition of all the fields displayed on the create account form 
  */
@@ -76,6 +79,12 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     
     // function to handle creating an account from the values currently defined in state
     private handleCreateAccount = () => {
+         // temporary (for development builds only)
+         if (mode === MODE.DEVELOPMENT) {
+            redirect(this.props.history, '/home/0');
+            return;
+        }
+         
         // validate all fields are set
         if (!accounts_validate_null_input<CreateAccountPOST, State>(this.state, this)){ return; }
 
@@ -104,8 +113,16 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             <div>
                 {AccountsPageContainer(
                     <div>
-                        {/* TODO refactor this into a page header */}
-                        <Typography variant='h1'>{'<\\>'}</Typography>
+                        <div style={{fontSize: '96px'}}>
+                            <Grid container alignItems='center' justify='flex-start' direction='row'>
+                                <Grid item>
+                                    <WebRoundedIcon fontSize='inherit'/>   
+                                </Grid>                   
+                                <Grid item>
+                                    <Typography variant='h4'>depend on me</Typography>                     
+                                </Grid>
+                            </Grid>
+                        </div>
                         {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
                              return {
                                 metadata:       item,
@@ -116,7 +133,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                 type:           item.key === 'request_password' ? 'password' : 'text'
                             }
                         }), [{
-                            content:        <Button color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
+                            content:        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,
                             direction:      'top', 
                             padding_size:   'x-small'
                         }, {
@@ -125,7 +142,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                     text:           'already have an account? sign in here',
                                     align:          'center',
                                     variant:        'subtitle2',
-                                    handle_click:   () => redirect(this.props.history, '/login')
+                                    handle_click:   (() => redirect(this.props.history, '/login'))
                                 }),
                             direction:'top', 
                             padding_size: 'x-small'

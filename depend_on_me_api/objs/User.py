@@ -9,6 +9,7 @@ class User(UserMixin):
     # first_name: str
     # last_name: str
     # tasks: list
+
     def __init__(
         self,
         id: str = None,
@@ -18,6 +19,7 @@ class User(UserMixin):
         last_name: str = None,
         privilege: int = 0,
         tags: list = [],
+        privilege: int = None,
     ):
         self.id = id
         self.password = password

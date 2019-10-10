@@ -1,6 +1,5 @@
 import { HttpRequest } from "../models/http-requests";
-
-import { remove_prefix } from "./utility-service";
+import { UtilityService } from "./utility-service";
 
 /**
  * frontend http microservice
@@ -56,7 +55,7 @@ export class HttpService {
      * @param field_name the name being converted to a display name (text that can be displayed to the user) 
      */
     public static GetRequestDisplayName<RequestInterface extends HttpRequest>(field_name: keyof RequestInterface): string {
-        return remove_prefix(field_name.toString(), '_');
+        return UtilityService.remove_prefix(field_name.toString(), '_');
     }
 
 

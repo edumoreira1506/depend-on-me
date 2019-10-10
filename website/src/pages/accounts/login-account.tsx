@@ -5,7 +5,7 @@ import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/forms/form';
 import { LoginAccountPOST } from '../../models/http-requests';
 import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from '../../components/forms/form-field';
-import { GetHttpRequestDisplayName, http_post, LOGIN_ACCOUNT_END_POINT, HTTP_SUCCESS } from '../../services/http-service';
+import { LOGIN_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { LinkControl } from '../../components/link-control';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
@@ -78,9 +78,9 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     }
 
     private performLoginAccountRequest = () => {
-        let result = http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
+        let result = HttpService.http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
-        if (result.statusCode === HTTP_SUCCESS) {
+        if (result.statusCode === HttpService.SUCCESS) {
             this.props.history.push('/home/0');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
@@ -107,7 +107,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                             fields.map<FormFieldParams<LoginAccountPOST>>(item => {
                                 return {
                                     metadata:       item,
-                                    label:          GetHttpRequestDisplayName<LoginAccountPOST>(item.key),
+                                    label:          HttpService.GetRequestDisplayName<LoginAccountPOST>(item.key),
                                     value:          this.state.request_data[item.key], 
                                     handle_change:  this.handleChange, 
                                     type:           item.key === 'request_password' ? 'password' : 'text', 

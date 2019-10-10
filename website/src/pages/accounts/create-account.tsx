@@ -3,7 +3,7 @@ import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification,  NOTIFICATION_STYLE_ERROR } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
-import { CREATE_ACCOUNT_END_POINT, http_post, HTTP_SUCCESS, GetHttpRequestDisplayName } from '../../services/http-service';
+import { CREATE_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';
 import { Form } from '../../components/forms/form';
 import { LinkControl } from '../../components/link-control';
@@ -99,9 +99,9 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     }
 
     private performCreateAccountRequest = () => {
-        let result = http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
+        let result = HttpService.http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
-        if (result.statusCode === HTTP_SUCCESS) {
+        if (result.statusCode === HttpService.SUCCESS) {
             this.props.history.push('/home');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
@@ -126,7 +126,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                         {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
                              return {
                                 metadata:       item,
-                                label:          GetHttpRequestDisplayName<CreateAccountPOST>(item.key),
+                                label:          HttpService.GetRequestDisplayName<CreateAccountPOST>(item.key),
                                 value:          this.state.request_data[item.key],
                                 handle_change:  this.handleChange,
                                 error:          this.state.invalid_fields.includes(item.key),

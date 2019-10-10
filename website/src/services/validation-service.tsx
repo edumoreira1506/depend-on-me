@@ -1,5 +1,5 @@
 import { RequestStateInterface, NotificationStateInterface } from "../models/types";
-import { GetHttpRequestDisplayName } from "./http-service";
+import { HttpService } from "./http-service";
 import { HttpEmailField, HttpPasswordField } from "../models/http-requests";
 
 // ===========================================================================================================================================================================
@@ -136,7 +136,7 @@ export function accounts_validate_null_input<RequestType, State extends (Request
     // if there is error, notify user and skip sending the request
     let first_null_field = all_null_fields[0];
     if (first_null_field != null) {
-        parent.setState({notification_data: {...state.notification_data, open: true, message: GetHttpRequestDisplayName<RequestType>(first_null_field) + ' cannot be empty'}});
+        parent.setState({notification_data: {...state.notification_data, open: true, message: HttpService.GetRequestDisplayName<RequestType>(first_null_field) + ' cannot be empty'}});
         return false;
     }
 

@@ -37,16 +37,16 @@ def create_account(potential_user: User):
     # Check if user name exists
     if db.collection(u"users").document(potential_user.id).get().exists:
         return "", status.HTTP_409_CONFLICT
-      
+
     doc_ref = db.collection(u"users").document(potential_user.id)
     doc_ref.set(potential_user.to_dict())
 
     return jsonify("")
 
+
 @backend.route("/login", methods=["POST"])
 def login():
     return jsonify(True)
-
 
 
 @login_manager.user_loader

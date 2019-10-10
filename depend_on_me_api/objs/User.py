@@ -19,7 +19,6 @@ class User(UserMixin):
         last_name: str = None,
         privilege: int = 0,
         tags: list = [],
-        privilege: int = None,
     ):
         self.id = id
         self.password = password

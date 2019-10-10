@@ -10,7 +10,7 @@ import { LinkControl } from '../../components/link-control';
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import H from 'history/index';
-import { redirect } from '../../services/page-service';
+import { PageService } from '../../services/page-service';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import { mode, MODE } from '../../App';
 
@@ -81,7 +81,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
     private handleCreateAccount = () => {
          // temporary (for development builds only)
          if (mode === MODE.DEVELOPMENT) {
-            redirect(this.props.history, '/home/0');
+            PageService.redirect(this.props.history, '/home/0');
             return;
         }
          
@@ -102,7 +102,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         let result = HttpService.http_post(CREATE_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HttpService.SUCCESS) {
-            this.props.history.push('/home');
+            PageService.redirect(this.props.history, '/home');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }
@@ -142,7 +142,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                                     text:           'already have an account? sign in here',
                                     align:          'center',
                                     variant:        'subtitle2',
-                                    handle_click:   (() => redirect(this.props.history, '/login'))
+                                    handle_click:   (() => PageService.redirect(this.props.history, '/login'))
                                 }),
                             direction:'top', 
                             padding_size: 'x-small'

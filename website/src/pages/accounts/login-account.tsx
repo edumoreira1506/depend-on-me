@@ -10,7 +10,7 @@ import { LinkControl } from '../../components/link-control';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
 import H from 'history/index';
-import { redirect } from '../../services/page-service';
+import { PageService } from '../../services/page-service';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import { MODE, mode } from '../../App';
 
@@ -60,7 +60,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     private handleLoginAccount = () => {
         // temporary (for development builds only)
         if (mode === MODE.DEVELOPMENT) {
-            redirect(this.props.history, '/home/0');
+            PageService.redirect(this.props.history, '/home/0');
             return;
         }
 
@@ -81,7 +81,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         let result = HttpService.http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
         if (result.statusCode === HttpService.SUCCESS) {
-            this.props.history.push('/home/0');
+            PageService.redirect(this.props.history, '/home/0');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }
@@ -132,7 +132,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "don't have an account? register here",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   (() => redirect(this.props.history, '/createaccount'))
+                                                    handle_click:   (() => PageService.redirect(this.props.history, '/createaccount'))
                                                 })}
                                             </Grid> 
                                             <Grid item>
@@ -140,7 +140,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "forgot password",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   (() => redirect(this.props.history, '/forgotaccount'))
+                                                    handle_click:   (() => PageService.redirect(this.props.history, '/forgotaccount'))
                                                 })}
                                             </Grid>
                                         </Grid>,

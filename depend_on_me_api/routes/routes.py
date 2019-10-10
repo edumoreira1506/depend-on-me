@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_api import status
 from flask_login import LoginManager
 from depend_on_me_api.objs import User
@@ -14,40 +14,40 @@ backend = Flask(
 login_manager = LoginManager()
 db = firestore.Client()
 
+
 def convert_input_to(class_):
     def wrap(f):
         def decorator(*args):
             obj = class_.from_request(request)
             return f(obj)
+
         return decorator
+
     return wrap
 
 
 @backend.route("/", methods=["GET"])
 def default():
-    return "", status.HTTP_200_OK
+    return jsonify("")
 
 
 @backend.route("/create_account", methods=["POST"])
 @convert_input_to(User)
 def create_account(potential_user: User):
-        
+
     # Check if user name exists
-    if db.collection(u'users').document(potential_user.id).get().exists:
+    if db.collection(u"users").document(potential_user.id).get().exists:
         return "", status.HTTP_409_CONFLICT
 
-    doc_ref = db.collection(u'users').document(
-        potential_user.id)
-    doc_ref.set(
-        potential_user.to_dict()
-    )
+    doc_ref = db.collection(u"users").document(potential_user.id)
+    doc_ref.set(potential_user.to_dict())
 
-    return "", status.HTTP_200_OK
+    return jsonify("")
 
 
 @backend.route("/login", methods=["POST"])
 def login():
-    return "200 OK"
+    return jsonify(True)
 
 
 @login_manager.user_loader

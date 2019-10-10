@@ -13,7 +13,7 @@ def lint(session):
     serious code quality issues.
     """
     session.install("flake8", "black")
-    session.install("-r", "depend_on_me_api/requirements.txt")
+    session.install("-r", "requirements.txt")
     session.run("black", "--check", *BLACK_PATHS)
     session.run("flake8", *BLACK_PATHS)
 
@@ -29,7 +29,7 @@ def blacken(session):
 def default(session):
     # Install all test dependencies, then install this package in-place.
     session.install("mock", "pytest", "pytest-cov", "pytest-asyncio")
-    session.install("-r", "depend_on_me_api/requirements.txt")
+    session.install("-r", "requirements.txt")
     session.install("-e", ".")
     # Run py.test against the unit tests.
     session.run(

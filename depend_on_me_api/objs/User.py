@@ -17,7 +17,7 @@ class User(UserMixin):
         first_name: str = None,
         last_name: str = None,
         privilege: int = 0,
-        tags: list = []
+        tags: list = [],
     ):
         self.id = id
         self.password = password
@@ -51,12 +51,12 @@ class User(UserMixin):
 
     def to_dict(self):
         user_dict = {
-            u'id': self.id,
-            u'first_name': self.first_name,
-            u'last': self.last_name,
-            u'email': self.email,
-            u'password': self.password,
-            u'privilege': self.privilege,
-            u'tags': self.tags
+            u"id": self.id,
+            u"first_name": self.first_name,
+            u"last": self.last_name,
+            u"email": self.email,
+            u"password": self.password,
+            u"privilege": self.privilege,
+            u"tags": self.tags,
         }
         return user_dict

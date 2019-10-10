@@ -8,7 +8,7 @@ import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from 
 import { LOGIN_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { LinkControl } from '../../components/link-control';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
-import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
+import { ValidationService } from '../../services/validation-service';
 import H from 'history/index';
 import { PageService } from '../../services/page-service';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
@@ -65,13 +65,13 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         }
 
         // validate null input
-        if (!accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
+        if (!ValidationService.accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
 
         // validate email address (format)
-        if (!accounts_validate_email<LoginAccountPOST, State>(this.state, this, 'incorrect email or password entered')) { return; }
+        if (!ValidationService.accounts_validate_email<LoginAccountPOST, State>(this.state, this, 'incorrect email or password entered')) { return; }
 
         // local password validate (format)
-        if (!accounts_validate_password<LoginAccountPOST, State>(this.state, this, "incorrect email or password entered")) { return; }
+        if (!ValidationService.accounts_validate_password<LoginAccountPOST, State>(this.state, this, "incorrect email or password entered")) { return; }
 
         // make request 
         this.performLoginAccountRequest();

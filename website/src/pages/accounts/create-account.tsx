@@ -7,7 +7,7 @@ import { CREATE_ACCOUNT_END_POINT, HttpService } from '../../services/http-servi
 import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';
 import { Form } from '../../components/forms/form';
 import { LinkControl } from '../../components/link-control';
-import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
+import { ValidationService } from '../../services/validation-service';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
 import H from 'history/index';
 import { PageService } from '../../services/page-service';
@@ -86,13 +86,13 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         }
          
         // validate all fields are set
-        if (!accounts_validate_null_input<CreateAccountPOST, State>(this.state, this)){ return; }
+        if (!ValidationService.accounts_validate_null_input<CreateAccountPOST, State>(this.state, this)){ return; }
 
         // validate email is the correct format
-        if (!accounts_validate_email<CreateAccountPOST, State>(this.state, this, 'invalid email address entered')) { return; }
+        if (!ValidationService.accounts_validate_email<CreateAccountPOST, State>(this.state, this, 'invalid email address entered')) { return; }
 
         // validate password
-        if (!accounts_validate_password<CreateAccountPOST, State>(this.state, this)) { return; }
+        if (!ValidationService.accounts_validate_password<CreateAccountPOST, State>(this.state, this)) { return; }
 
         // make request
         this.performCreateAccountRequest();

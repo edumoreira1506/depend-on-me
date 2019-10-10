@@ -5,6 +5,10 @@ import { padding_direction } from "../models/types";
  */
 export class UtilityService {
 
+    // ============================================================================================
+    // PUBLIC METHODS
+    // ============================================================================================
+
     /**
      * converts a padding direction and a value into a padding css value. this does 
      * not support complex combinations (ie different values for each individual direction)

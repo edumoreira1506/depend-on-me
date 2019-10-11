@@ -1,6 +1,7 @@
 from flask_login.mixins import UserMixin
 from typing import List
 
+
 class User(UserMixin):
 
     # id: str

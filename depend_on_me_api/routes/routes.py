@@ -30,7 +30,7 @@ def default():
     return jsonify("")
 
 
-@backend.route("/create_account", methods=["POST"])
+@backend.route("/account/create", methods=["POST"])
 @convert_input_to(User)
 def create_account(potential_user: User):
 

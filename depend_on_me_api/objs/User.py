@@ -1,5 +1,5 @@
 from flask_login.mixins import UserMixin
-
+from typing import List
 
 class User(UserMixin):
 
@@ -18,7 +18,7 @@ class User(UserMixin):
         first_name: str = None,
         last_name: str = None,
         privilege: int = 0,
-        tags: list = [],
+        tags: List[int] = [],
     ):
         self.id = id
         self.password = password

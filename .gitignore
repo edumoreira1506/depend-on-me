@@ -14,3 +14,4 @@ env/*
 # Other
 website/static/
 start.txt
+depend_on_me_api.egg-info/

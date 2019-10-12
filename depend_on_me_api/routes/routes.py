@@ -1,6 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_api import status
 from flask_login import LoginManager
 from depend_on_me_api.objs import User
+from google.cloud import firestore
 
 backend = Flask(
     __name__,
@@ -9,29 +11,42 @@ backend = Flask(
     template_folder="../../website/static/public/",
 )
 login_manager = LoginManager()
+db = firestore.Client()
+
+
+def convert_input_to(class_):
+    def wrap(f):
+        def decorator(*args):
+            obj = class_.from_request(request)
+            return f(obj)
+
+        return decorator
+
+    return wrap
 
 
 @backend.route("/", methods=["GET"])
 def default():
-    return "200 OK"
+    return jsonify("")
 
 
-@backend.route("/create_account", methods=["POST"])
-def create_account():
-    potential_user = User(  # noqa
-        id=request.json["request_username"],
-        password=request.json["request_password"],
-        email=request.json["request_email"],
-        first_name=request.json["request_first_name"],
-        last_name=request.json["request_last_name"],
-    )
-    # Do something with user
-    return "200 OK"
+@backend.route("/account/create", methods=["POST"])
+@convert_input_to(User)
+def create_account(potential_user: User):
+
+    # Check if user name exists
+    if db.collection(u"users").document(potential_user.id).get().exists:
+        return "", status.HTTP_409_CONFLICT
+
+    doc_ref = db.collection(u"users").document(potential_user.id)
+    doc_ref.set(potential_user.to_dict())
+
+    return jsonify("")
 
 
 @backend.route("/login", methods=["POST"])
 def login():
-    return "200 OK"
+    return jsonify(True)
 
 
 @login_manager.user_loader

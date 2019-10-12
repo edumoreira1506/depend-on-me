@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import CreateAccountPage from './pages/accounts/create-account';
 import LoginAccountPage from './pages/accounts/login-account';
+
 import { HomePage } from './pages/home';
 import LandingPage from './pages/landing-page';
 import { NotFoundPage } from './pages/not-found';

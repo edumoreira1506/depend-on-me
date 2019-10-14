@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import H from 'history/index';
 import { PageService } from '../services/page-service';
+import { BlankSpace } from '../components/blank-space';
 
 
 interface Props {
@@ -25,10 +26,11 @@ export default class LandingPage extends React.Component<Props, State> {
             >
                 <Grid item xs={6} style={{minWidth: '20vw'}}>
                     <Typography variant='h1'>depend on me
+                        {BlankSpace({height: '1vh'})}
                         <Typography variant='h4'>description of depend on me</Typography>
                     </Typography>
                 </Grid>
-                <div style={{minHeight: '5vh'}}/>
+                {BlankSpace({height:'5vh'})}
                 <Grid
                     item xs={6}
                     container

@@ -4,6 +4,7 @@ import React from 'react';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import { PageService } from '../services/page-service';
+import { BlankSpace } from '../components/blank-space';
 
 const theme = createMuiTheme();
 
@@ -74,7 +75,7 @@ export class HomePage extends React.Component<Props, State> {
                         <div style={{minWidth: theme.spacing(2)}}></div>
                         <Button color='inherit' onClick={()=>PageService.redirect(this.props.history, '/organization/0')}>organization</Button>
 
-                        <div style={{flexGrow: 1}}></div>
+                        {BlankSpace({fill: true})}
                         <IconButton color="inherit" aria-label="logout" aria-controls="menu-appbar" aria-haspopup="true" onClick={this.handleMenu}>
                             <AccountCircleRoundedIcon />
                         </IconButton>

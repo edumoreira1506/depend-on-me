@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import H from 'history/index';
+import { BlankSpace } from '../components/blank-space';
 
 interface Props {
     history: H.History<any>;
@@ -27,7 +28,7 @@ export class NotFoundPage extends React.Component<Props, State> {
                         <Typography variant='h4' align='left'>this page does not exist</Typography>
                     </Typography>
                 </Grid>
-                <div style={{minHeight: '5vh'}}/>
+                {BlankSpace({height:'5vh'})}
                 <Grid
                     item md={6}
                     container

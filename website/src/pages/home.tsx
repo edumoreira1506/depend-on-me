@@ -3,7 +3,7 @@ import H from 'history/index';
 import React from 'react';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
-import { redirect } from '../services/page-service';
+import { PageService } from '../services/page-service';
 
 const theme = createMuiTheme();
 
@@ -47,13 +47,13 @@ export class HomePage extends React.Component<Props, State> {
 
     handleLogin = () => {
         this.handleClose();
-        redirect(this.props.history, '/login');
+        PageService.redirect(this.props.history, '/login');
     }
 
     handleLogout = () => {
         this.handleClose();
         // TODO remove persisting user
-        redirect(this.props.history, '/login');
+        PageService.redirect(this.props.history, '/login');
     }
 
     render() {
@@ -62,17 +62,17 @@ export class HomePage extends React.Component<Props, State> {
                 <AppBar elevation={0} position='static'>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" aria-label="menu">
-                            <WebRoundedIcon onClick={()=>redirect(this.props.history, '/home/0')}/>
+                            <WebRoundedIcon onClick={()=>PageService.redirect(this.props.history, '/home/0')}/>
                         </IconButton>
 
                         <div style={{minWidth: theme.spacing(2)}}></div>
-                        <Button color='inherit' onClick={()=>redirect(this.props.history, '/tasks/0')}>tasks</Button>
+                        <Button color='inherit' onClick={()=>PageService.redirect(this.props.history, '/tasks/0')}>tasks</Button>
 
                         <div style={{minWidth: theme.spacing(2)}}></div>
-                        <Button color='inherit' onClick={()=>redirect(this.props.history, '/projects/0')}>projects</Button>
+                        <Button color='inherit' onClick={()=>PageService.redirect(this.props.history, '/projects/0')}>projects</Button>
 
                         <div style={{minWidth: theme.spacing(2)}}></div>
-                        <Button color='inherit' onClick={()=>redirect(this.props.history, '/organization/0')}>organization</Button>
+                        <Button color='inherit' onClick={()=>PageService.redirect(this.props.history, '/organization/0')}>organization</Button>
 
                         <div style={{flexGrow: 1}}></div>
                         <IconButton color="inherit" aria-label="logout" aria-controls="menu-appbar" aria-haspopup="true" onClick={this.handleMenu}>
@@ -94,7 +94,7 @@ export class HomePage extends React.Component<Props, State> {
                             onClose={this.handleClose}
                         >
                             {this.state.auth && <div style={{minWidth: '10vw'}}>
-                                <MenuItem onClick={()=>redirect(this.props.history, '/myaccount')}>My account</MenuItem>
+                                <MenuItem onClick={()=>PageService.redirect(this.props.history, '/myaccount')}>My account</MenuItem>
                                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                             </div>}
                             {!this.state.auth && <div style={{minWidth: '10vw'}}>

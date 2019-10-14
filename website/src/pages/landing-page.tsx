@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import H from 'history/index';
-import { redirect } from '../services/page-service';
+import { PageService } from '../services/page-service';
 
 
 interface Props {
@@ -38,10 +38,10 @@ export default class LandingPage extends React.Component<Props, State> {
                     justify="flex-start"
                 >
                     <Grid xs={2} item>
-                        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/login')}>login</Button>
+                        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={() => PageService.redirect(this.props.history, '/login')}>login</Button>
                     </Grid>
                     <Grid md={2} item>
-                        <Button style={{boxShadow: "none", minWidth: '160px'}} color='primary' variant='contained' fullWidth onClick={() => redirect(this.props.history, '/createaccount')}>create account</Button>
+                        <Button style={{boxShadow: "none", minWidth: '160px'}} color='primary' variant='contained' fullWidth onClick={() => PageService.redirect(this.props.history, '/createaccount')}>create account</Button>
                     </Grid>
                 </Grid>
             </Grid>

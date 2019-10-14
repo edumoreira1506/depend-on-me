@@ -5,12 +5,12 @@ import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/forms/form';
 import { LoginAccountPOST } from '../../models/http-requests';
 import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from '../../components/forms/form-field';
-import { GetHttpRequestDisplayName, http_post, LOGIN_ACCOUNT_END_POINT, HTTP_SUCCESS } from '../../services/http-service';
+import { LOGIN_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { LinkControl } from '../../components/link-control';
 import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
-import { accounts_validate_null_input, accounts_validate_email, accounts_validate_password } from '../../services/validation-service';
+import { ValidationService } from '../../services/validation-service';
 import H from 'history/index';
-import { redirect } from '../../services/page-service';
+import { PageService } from '../../services/page-service';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import { MODE, mode } from '../../App';
 
@@ -60,28 +60,28 @@ export default class LoginAccountPage extends React.Component<Props, State> {
     private handleLoginAccount = () => {
         // temporary (for development builds only)
         if (mode === MODE.DEVELOPMENT) {
-            redirect(this.props.history, '/home/0');
+            PageService.redirect(this.props.history, '/home/0');
             return;
         }
 
         // validate null input
-        if (!accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
+        if (!ValidationService.accounts_validate_null_input<LoginAccountPOST, State>(this.state, this)) { return; }
 
         // validate email address (format)
-        if (!accounts_validate_email<LoginAccountPOST, State>(this.state, this, 'incorrect email or password entered')) { return; }
+        if (!ValidationService.accounts_validate_email<LoginAccountPOST, State>(this.state, this, 'incorrect email or password entered')) { return; }
 
         // local password validate (format)
-        if (!accounts_validate_password<LoginAccountPOST, State>(this.state, this, "incorrect email or password entered")) { return; }
+        if (!ValidationService.accounts_validate_password<LoginAccountPOST, State>(this.state, this, "incorrect email or password entered")) { return; }
 
         // make request 
         this.performLoginAccountRequest();
     }
 
     private performLoginAccountRequest = () => {
-        let result = http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
+        let result = HttpService.http_post(LOGIN_ACCOUNT_END_POINT, JSON.stringify(this.state.request_data));
 
-        if (result.statusCode === HTTP_SUCCESS) {
-            this.props.history.push('/home/0');
+        if (result.statusCode === HttpService.SUCCESS) {
+            PageService.redirect(this.props.history, '/home/0');
         } else {
             this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
         }
@@ -107,7 +107,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                             fields.map<FormFieldParams<LoginAccountPOST>>(item => {
                                 return {
                                     metadata:       item,
-                                    label:          GetHttpRequestDisplayName<LoginAccountPOST>(item.key),
+                                    label:          HttpService.GetRequestDisplayName<LoginAccountPOST>(item.key),
                                     value:          this.state.request_data[item.key], 
                                     handle_change:  this.handleChange, 
                                     type:           item.key === 'request_password' ? 'password' : 'text', 
@@ -132,7 +132,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "don't have an account? register here",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   (() => redirect(this.props.history, '/createaccount'))
+                                                    handle_click:   (() => PageService.redirect(this.props.history, '/createaccount'))
                                                 })}
                                             </Grid> 
                                             <Grid item>
@@ -140,7 +140,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                                                     text:           "forgot password",
                                                     align:          'center',
                                                     variant:        'subtitle2',
-                                                    handle_click:   (() => redirect(this.props.history, '/forgotaccount'))
+                                                    handle_click:   (() => PageService.redirect(this.props.history, '/forgotaccount'))
                                                 })}
                                             </Grid>
                                         </Grid>,

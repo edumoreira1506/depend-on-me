@@ -1,7 +1,7 @@
 import React from 'react';
 import { display_content, named_size, padding_direction } from '../../models/types';
 import { Box, Grid } from '@material-ui/core';
-import { padding_to_css } from '../../services/utility-service';
+import { UtilityService } from '../../services/utility-service';
 
 
 /**
@@ -36,15 +36,15 @@ export function FormControl(params: FormControlParams) {
 function get_padding_value(direction: padding_direction, padding_size: named_size): string {
     switch (padding_size) {
         case 'x-small': 
-            return padding_to_css(direction, '1vw');
+            return UtilityService.padding_to_css(direction, '1vw');
         case 'small':
-            return padding_to_css(direction, '2vw');
+            return UtilityService.padding_to_css(direction, '2vw');
         case 'medium':
-            return padding_to_css(direction, '5vw');  
+            return UtilityService.padding_to_css(direction, '5vw');  
         case 'large':
-            return padding_to_css(direction, '10vw');
+            return UtilityService.padding_to_css(direction, '10vw');
         default:
-            return padding_to_css('none', '0');
+            return UtilityService.padding_to_css('none', '0');
     }
 
 }

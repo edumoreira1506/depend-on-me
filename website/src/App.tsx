@@ -58,7 +58,7 @@ function None() {
 /**
  * current mode to use when rendering the website
  */
-export const mode: MODE = MODE.DEVELOPMENT;
+export const mode: MODE = MODE.PRODUCTION;
 
 /**
  * renders the complete website

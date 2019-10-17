@@ -12,5 +12,5 @@ export interface RequestStateInterface<RequestType extends HttpRequest> {
 }
 
 export interface NotificationStateInterface {
-    notification_data: NotificationFunctionalProps;
+    notification_data: NotificationFunctionalProps<any, any>;
 }

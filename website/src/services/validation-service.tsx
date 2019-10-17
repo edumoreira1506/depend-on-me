@@ -1,6 +1,7 @@
 import { RequestStateInterface, NotificationStateInterface } from "../models/types";
 import { HttpService } from "./http-service";
 import { HttpEmailField, HttpPasswordField } from "../models/http-requests";
+import { ShowNotification } from "../components/notification";
 
 
 export class ValidationService {
@@ -126,14 +127,15 @@ export class ValidationService {
      * @param state current state associated with <parent>
      * @param parent the component being validated
      */
-    public static accounts_validate_null_input<RequestType, State extends (RequestStateInterface<RequestType> & NotificationStateInterface)>(state: State, parent: React.Component): boolean {
+    public static accounts_validate_null_input<RequestType, State extends (RequestStateInterface<RequestType> & NotificationStateInterface)>(state: State, parent: React.Component<any, State & any>): boolean {
         let all_null_fields = ValidationService.get_all_null_fields(state.request_data);
         parent.setState({invalid_fields: all_null_fields});
         
         // if there is error, notify user and skip sending the request
         let first_null_field = all_null_fields[0];
         if (first_null_field != null) {
-            parent.setState({notification_data: {...state.notification_data, open: true, message: HttpService.GetRequestDisplayName<RequestType>(first_null_field) + ' cannot be empty'}});
+            let notification_message: string = HttpService.GetRequestDisplayName<RequestType>(first_null_field) + ' cannot be empty';
+            ShowNotification(parent, notification_message);
             return false;
         }
 
@@ -146,11 +148,11 @@ export class ValidationService {
      * @param parent the component being validated
      * @param notification_message the message to display within the component if validation fails
      */
-    public static accounts_validate_email<RequestType extends HttpEmailField, State extends (RequestStateInterface<RequestType> & NotificationStateInterface)>(state: State, parent: React.Component, notification_message: string): boolean {
+    public static accounts_validate_email<RequestType extends HttpEmailField, State extends (RequestStateInterface<RequestType> & NotificationStateInterface)>(state: State, parent: React.Component<any, State>, notification_message: string): boolean {
         let email_validation: boolean = ValidationService.validate_email(state.request_data.request_email);
 
         if (!email_validation) {
-            parent.setState({notification_data: {...state.notification_data, open: true, message: notification_message}});
+            ShowNotification(parent, notification_message);
         }
 
         return email_validation;
@@ -162,14 +164,14 @@ export class ValidationService {
      * @param parent the component being validated
      * @param notification_message the message to display within the component if validation fails
      */
-    public static accounts_validate_password<RequestType extends HttpPasswordField, State extends (RequestStateInterface<RequestType> & NotificationStateInterface)>(state: State, parent: React.Component, notification_message?: string): boolean {
+    public static accounts_validate_password<RequestType extends HttpPasswordField, State extends (RequestStateInterface<RequestType> & NotificationStateInterface)>(state: State, parent: React.Component<any, State>, notification_message?: string): boolean {
         let password_validation = ValidationService.validate_password(state.request_data.request_password, ValidationService.password_contains_lowercase, 
             ValidationService.password_contains_uppercase, ValidationService.password_contains_number, ValidationService.password_contains_symbol, 
             ValidationService.password_is_min_size);
 
         if (!password_validation.result) {
             let message: string = 'password ' + (notification_message === undefined ? password_validation.message : notification_message);
-            parent.setState({notification_data: {...state.notification_data, open: true, message: message}});
+            ShowNotification(parent, message);
             return false;
         }
 

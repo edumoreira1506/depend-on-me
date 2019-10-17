@@ -1,7 +1,7 @@
 import { Button, Typography, Grid } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
-import { Notification,  NOTIFICATION_STYLE_ERROR } from '../../components/notification';
+import { Notification,  NOTIFICATION_STYLE_ERROR, HideNotification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';
@@ -60,7 +60,8 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         notification_data: {
             open: false, 
             message: "",
-            on_close: () => {this.setState({notification_data: {...this.state.notification_data, open: false}})}
+            parent: this,
+            style: NOTIFICATION_STYLE_DEFAULT
         },
         invalid_fields: []
     };
@@ -104,7 +105,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         if (result.statusCode === HttpService.SUCCESS) {
             PageService.redirect(this.props.history, '/home');
         } else {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
+            ShowNotification(this, result['error']);
         }
     }
 
@@ -150,7 +151,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                         )}
                     </div>
                 )}
-                {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
+                {Notification(this)}
             </div>
         );
     }

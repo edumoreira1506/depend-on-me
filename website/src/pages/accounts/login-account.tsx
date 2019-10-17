@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Notification, NOTIFICATION_STYLE_ERROR } from '../../components/notification';
+import { Notification, NOTIFICATION_STYLE_ERROR, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/forms/form';
@@ -41,7 +41,8 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         notification_data: {
             open: false,
             message: "",
-            on_close: () => {this.setState({notification_data:{...this.state.notification_data, open: false}})}
+            parent: this,
+            style: NOTIFICATION_STYLE_DEFAULT
         },
         invalid_fields: []
     };
@@ -83,7 +84,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         if (result.statusCode === HttpService.SUCCESS) {
             PageService.redirect(this.props.history, '/home/0');
         } else {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
+            ShowNotification(this, result['error']);
         }
     }
 
@@ -154,7 +155,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                 )}
                 
                 {/* Notification Manager*/}
-                {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
+                {Notification(this)}
             </div>
         );
     }

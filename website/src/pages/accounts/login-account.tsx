@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Notification, NOTIFICATION_STYLE_ERROR, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
+import { Notification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { Typography, Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/forms/form';

@@ -1,7 +1,7 @@
 import { Button, Typography, Grid } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
-import { Notification,  NOTIFICATION_STYLE_ERROR, HideNotification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
+import { Notification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';

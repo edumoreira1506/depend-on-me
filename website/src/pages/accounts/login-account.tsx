@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Notification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import AccountsPageContainer from '../../components/accounts-page-container';
-import { Typography, Button, Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/forms/form';
 import { LoginAccountPOST } from '../../models/http-requests';
 import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from '../../components/forms/form-field';
@@ -11,8 +11,8 @@ import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray 
 import { ValidationService } from '../../services/validation-service';
 import H from 'history/index';
 import { PageService } from '../../services/page-service';
-import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import { MODE, mode } from '../../App';
+import { AccountsPageHeader } from '../../components/accounts-page-header';
 
 interface Props {
     history: H.History<any>;
@@ -93,17 +93,7 @@ export default class LoginAccountPage extends React.Component<Props, State> {
             <div> 
                 {AccountsPageContainer(
                     <div>
-                        {/* <Typography variant='h1'>{'<\\>'}</Typography> */}
-                        <div style={{fontSize: '96px'}}>
-                            <Grid container alignItems='center' justify='flex-start' direction='row'>
-                                <Grid item>
-                                    <WebRoundedIcon fontSize='inherit'/>   
-                                </Grid>                   
-                                <Grid item>
-                                    <Typography variant='h4'>depend on me</Typography>                     
-                                </Grid>
-                            </Grid>
-                        </div>
+                        { AccountsPageHeader() }
                         {Form(
                             fields.map<FormFieldParams<LoginAccountPOST>>(item => {
                                 return {

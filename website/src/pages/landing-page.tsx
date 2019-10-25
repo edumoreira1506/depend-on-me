@@ -1,11 +1,10 @@
 import React from 'react';
 import { Grid, Button } from '@material-ui/core';
-import H from 'history/index';
 import { PageService } from '../services/page-service';
 import { PageContainer } from '../components/page-container';
+import { HistoryPropInterface } from '../models/types';
 
-interface Props {
-    history: H.History<any>;
+interface Props extends HistoryPropInterface {
 }
 
 interface State {

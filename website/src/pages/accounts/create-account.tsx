@@ -8,8 +8,7 @@ import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from 
 import { Form } from '../../components/forms/form';
 import { LinkControl } from '../../components/link-control';
 import { ValidationService } from '../../services/validation-service';
-import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
-import H from 'history/index';
+import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray, HistoryPropInterface } from '../../models/types';
 import { PageService } from '../../services/page-service';
 import { mode, MODE } from '../../App';
 import { AccountsPageHeader } from '../../components/accounts-page-header';
@@ -29,8 +28,7 @@ const fields: FormFieldMetadata<CreateAccountPOST>[] = [
 /**
  * Props for this component. No props have been defined for this component
  */
-interface Props {
-    history: H.History<any>;
+interface Props extends HistoryPropInterface {
 }
 
 /**

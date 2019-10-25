@@ -7,15 +7,13 @@ import { LoginAccountPOST } from '../../models/http-requests';
 import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from '../../components/forms/form-field';
 import { LOGIN_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { LinkControl } from '../../components/link-control';
-import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
+import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray, HistoryPropInterface } from '../../models/types';
 import { ValidationService } from '../../services/validation-service';
-import H from 'history/index';
 import { PageService } from '../../services/page-service';
 import { MODE, mode } from '../../App';
 import { AccountsPageHeader } from '../../components/accounts-page-header';
 
-interface Props {
-    history: H.History<any>;
+interface Props extends HistoryPropInterface {
 }
 
 interface State extends RequestStateInterface<LoginAccountPOST>, NotificationStateInterface {

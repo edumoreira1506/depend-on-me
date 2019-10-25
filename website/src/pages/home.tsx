@@ -1,10 +1,9 @@
 import { Grid, Typography } from '@material-ui/core';
-import H from 'history/index';
 import React from 'react';
 import { NavigationBar } from '../components/navigation-bar';
+import { HistoryPropInterface } from '../models/types';
 
-interface Props {
-    history: H.History<any>;
+interface Props extends HistoryPropInterface {
 }
 
 interface State {
@@ -15,7 +14,7 @@ export class HomePage extends React.Component<Props, State> {
     render() {
         return (
             <div style={{flexGrow: 1, minHeight: '100vh', display: 'flex', flexFlow: 'column'}}>
-                <NavigationBar history={this.props.history} />
+                <NavigationBar<Props> parent={this} />
 
                 <Grid 
                     container

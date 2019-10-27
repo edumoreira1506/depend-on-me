@@ -1,18 +1,17 @@
-import { Button, Typography, Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import * as React from 'react';
 import AccountsPageContainer from '../../components/accounts-page-container';
-import { Notification,  NOTIFICATION_STYLE_ERROR } from '../../components/notification';
+import { Notification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';
 import { Form } from '../../components/forms/form';
 import { LinkControl } from '../../components/link-control';
 import { ValidationService } from '../../services/validation-service';
-import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray } from '../../models/types';
-import H from 'history/index';
+import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray, HistoryPropInterface } from '../../models/types';
 import { PageService } from '../../services/page-service';
-import WebRoundedIcon from '@material-ui/icons/WebRounded';
 import { mode, MODE } from '../../App';
+import { AccountsPageHeader } from '../../components/accounts-page-header';
 
 /**
  * definition of all the fields displayed on the create account form 
@@ -29,8 +28,7 @@ const fields: FormFieldMetadata<CreateAccountPOST>[] = [
 /**
  * Props for this component. No props have been defined for this component
  */
-interface Props {
-    history: H.History<any>;
+interface Props extends HistoryPropInterface {
 }
 
 /**
@@ -60,7 +58,8 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         notification_data: {
             open: false, 
             message: "",
-            on_close: () => {this.setState({notification_data: {...this.state.notification_data, open: false}})}
+            parent: this,
+            style: NOTIFICATION_STYLE_DEFAULT
         },
         invalid_fields: []
     };
@@ -104,7 +103,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         if (result.statusCode === HttpService.SUCCESS) {
             PageService.redirect(this.props.history, '/home');
         } else {
-            this.setState({notification_data: {...this.state.notification_data, open: true, message: result['error']}});
+            ShowNotification(this, result['error']);
         }
     }
 
@@ -113,16 +112,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
             <div>
                 {AccountsPageContainer(
                     <div>
-                        <div style={{fontSize: '96px'}}>
-                            <Grid container alignItems='center' justify='flex-start' direction='row'>
-                                <Grid item>
-                                    <WebRoundedIcon fontSize='inherit'/>   
-                                </Grid>                   
-                                <Grid item>
-                                    <Typography variant='h4'>depend on me</Typography>                     
-                                </Grid>
-                            </Grid>
-                        </div>
+                        { AccountsPageHeader() }
                         {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
                              return {
                                 metadata:       item,
@@ -150,7 +140,7 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                         )}
                     </div>
                 )}
-                {Notification(this.state.notification_data, NOTIFICATION_STYLE_ERROR)}
+                {Notification(this)}
             </div>
         );
     }

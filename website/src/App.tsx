@@ -7,6 +7,7 @@ import LoginAccountPage from './pages/accounts/login-account';
 import { HomePage } from './pages/home';
 import LandingPage from './pages/landing-page';
 import { NotFoundPage } from './pages/not-found';
+import { ForgotAccountPage } from './pages/accounts/forgot-account';
 
 // different modes to render the application for testing and development purposes
 export enum MODE { 
@@ -32,6 +33,7 @@ function Development() {
         <Route exact path='/' render={(props) => <LandingPage history={props.history}></LandingPage>} />
         <Route path='/login' render={(props) => <LoginAccountPage history={props.history}></LoginAccountPage>} />
         <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
+        <Route path='/forgotaccount' render={(props) => <ForgotAccountPage history={props.history}></ForgotAccountPage>} />
         <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />
         <Route render={(props) => <NotFoundPage history={props.history}></NotFoundPage>} />
       </Switch>
@@ -42,7 +44,7 @@ function Development() {
 // render function for incomplete experimental features. should be used for testing individual rendering and
 // functionality of sub parts of the program.
 function Playground() {
-  return None();
+    return None();
 }
 
 // render function for when no app mode is defined

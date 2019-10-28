@@ -1,17 +1,20 @@
 ---
 name: Refactor request
-about: This template is for requesting that an existing system or feature be reworked
-title: refactor-feature-name
-labels: ''
+about: Suggest an revision for this project
+title: ''
+labels: refactor
 assignees: ''
 
 ---
 
-**Reason for refactoring**
-provide features, system design docs / implementations or code samples of both the old feature or system and new changes to those systems.  
+**Is your refactor request related to a problem? Please describe.**
+A clear and concise description of what the problem is. Ex. feature [x, y, z] all have a similar structure that could be abstracted
 
-**Scope** 
-provide a list of all the files, systems and subsystems that will be affected
+**Describe the solution you'd like**
+A clear and concise description of what you want to happen.
 
-**Size**
-provide a reasonably predicted length of time to implement and test the proposed change along with all the teams and developers involved
+**Describe the scope of the revision**
+A clear and concise description of all features and systems involved in the proposed change.
+
+**Additional context**
+Add any other context or screenshots about the feature request here.

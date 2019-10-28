@@ -2,7 +2,7 @@
 name: Test Case request
 about: Suggest a test case for this project
 title: ''
-labels: ''
+labels: testing
 assignees: ''
 
 ---

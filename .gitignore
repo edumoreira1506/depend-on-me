@@ -11,7 +11,12 @@
 .nox/*
 env/*
 
+# Rust
+Cargo.lock
+target/
+
 # Other
 website/static/
 start.txt
 depend_on_me_api.egg-info/
+

@@ -24,6 +24,22 @@ fn create_user() -> &'static str {
     "Not implemented."
 }
 
+#[get("/account")]
+fn get_user() -> &'static str {
+    /// Returns a JSON object with user information.
+    /// 
+    /// Takes in a the following arguments in a form:
+    ///  * request_username: str
+    ///  * auth_username: str
+    ///  * auth_password: str
+    ///
+    /// Returns:
+    ///  * 200 OK if successful
+    ///  * 409 CONFLICT if username still exists
+    "Not implemented."
+}
+
+
 
 #[post("/login")]
 fn create_user() -> &'static str {

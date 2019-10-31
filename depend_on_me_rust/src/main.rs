@@ -7,12 +7,12 @@ fn index() -> &'static str {
     "Hello, world!"
 }
 
-#[get("/account/create")]
+#[post("/account/create")]
 fn create_user() -> &'static str {
     "Hello world!"
 }
 
-#[get("/login")]
+#[post("/login")]
 fn create_user() -> &'static str {
     "Hello world!"
 }

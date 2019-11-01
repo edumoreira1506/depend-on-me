@@ -1,6 +1,7 @@
  #![feature(proc_macro_hygiene, decl_macro)]
 
 #[macro_use] extern crate rocket;
+	
 
 #[get("/")]
 fn index() -> &'static str {
@@ -39,13 +40,33 @@ fn get_user() -> &'static str {
     "Not implemented."
 }
 
-
-
 #[post("/login")]
-fn create_user() -> &'static str {
+fn login() -> &'static str {
     "Hello world!"
 }
 
+fn r() -> rocket::Rocket {
+    rocket::ignite().mount("/", routes![index, create_user, get_user, login])
+}
+
 fn main() {
-    rocket::ignite().mount("/", routes![index]).launch();
+    r().launch();
+}
+
+
+#[cfg(test)]
+mod test {
+    use super::rocket;
+    use super::r;
+    use rocket::local::Client;
+    use rocket::http::Status;
+
+    #[test]
+    fn test_get_index() {
+        let client = Client::new(r()).expect("valid rocket instance");
+        let mut response = client.get("/").dispatch();
+
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Hello, world!".into()));
+    }
 }

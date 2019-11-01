@@ -69,4 +69,13 @@ mod test {
         assert_eq!(response.status(), Status::Ok);
         assert_eq!(response.body_string(), Some("Hello, world!".into()));
     }
+
+    #[test]
+    fn test_get_account() {
+        let client = Client::new(r()).expect("valid rocket instance");
+        let mut response = client.get("/account").dispatch();
+
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Not implemented.".into()));
+    }
 }

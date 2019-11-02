@@ -40,13 +40,28 @@ fn get_user() -> &'static str {
     "Not implemented."
 }
 
+#[delete("/account")]
+fn delete_user() -> &'static str {
+    /// Returns a JSON object with user information.
+    /// 
+    /// Takes in a the following arguments in a form:
+    ///  * request_username: str
+    ///  * auth_username: str
+    ///  * auth_password: str
+    ///
+    /// Returns:
+    ///  * 200 OK if successful
+    ///  * 409 CONFLICT if username still exists
+    "Not implemented."
+}
+
 #[post("/login")]
 fn login() -> &'static str {
     "Hello world!"
 }
 
 fn r() -> rocket::Rocket {
-    rocket::ignite().mount("/", routes![index, create_user, get_user, login])
+    rocket::ignite().mount("/", routes![index, create_user, get_user, delete_user, login])
 }
 
 fn main() {
@@ -74,6 +89,24 @@ mod test {
     fn test_get_account() {
         let client = Client::new(r()).expect("valid rocket instance");
         let mut response = client.get("/account").dispatch();
+
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Not implemented.".into()));
+    }
+
+    #[test]
+    fn test_create_account() {
+        let client = Client::new(r()).expect("valid rocket instance");
+        let mut response = client.post("/account").dispatch();
+
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Not implemented.".into()));
+    }
+
+    #[test]
+    fn test_delete_account() {
+        let client = Client::new(r()).expect("valid rocket instance");
+        let mut response = client.delete("/account").dispatch();
 
         assert_eq!(response.status(), Status::Ok);
         assert_eq!(response.body_string(), Some("Not implemented.".into()));

@@ -1,7 +1,5 @@
 language: rust
 rust:
-  - stable
-  - beta
   - nightly
 before_script: cd depend_on_me_rust
 jobs:

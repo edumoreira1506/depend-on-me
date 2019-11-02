@@ -9,19 +9,19 @@ fn index() -> &'static str {
 }
 
 #[post("/account")]
+/// Returns a JSON object with user information.
+/// 
+/// Takes in a the following arguments in a form:
+///  * request_username: str
+///  * request_first_name: str
+///  * request_last_name: str
+///  * request_password: str
+///  * request_email: str
+///
+/// Returns:
+///  * 200 OK if successfule
+///  * 409 CONFLICT if username still exists
 fn create_user() -> &'static str {
-    /// Returns a JSON object with user information.
-    /// 
-    /// Takes in a the following arguments in a form:
-    ///  * request_username: str
-    ///  * request_first_name: str
-    ///  * request_last_name: str
-    ///  * request_password: str
-    ///  * request_email: str
-    ///
-    /// Returns:
-    ///  * 200 OK if successfule
-    ///  * 409 CONFLICT if username still exists
     "Not implemented."
 }
 

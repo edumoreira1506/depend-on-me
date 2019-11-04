@@ -8,6 +8,7 @@ import { HomePage } from './pages/home';
 import LandingPage from './pages/landing-page';
 import { NotFoundPage } from './pages/not-found';
 import { ForgotAccountPage } from './pages/accounts/forgot-account';
+import { MyAccountPage } from './pages/accounts/my-account';
 
 // different modes to render the application for testing and development purposes
 export enum MODE { 
@@ -35,6 +36,7 @@ function Development() {
         <Route path='/createaccount' render={(props) => <CreateAccountPage history={props.history}></CreateAccountPage>} />
         <Route path='/forgotaccount' render={(props) => <ForgotAccountPage history={props.history}></ForgotAccountPage>} />
         <Route path='/home/:userid' render={(props) => <HomePage history={props.history}></HomePage>} />
+        <Route path='/myaccount' render={(props) => <MyAccountPage history={props.history}></MyAccountPage>} />
         <Route render={(props) => <NotFoundPage history={props.history}></NotFoundPage>} />
       </Switch>
     </Router>

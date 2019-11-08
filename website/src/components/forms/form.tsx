@@ -2,8 +2,9 @@ import React from 'react';
 import {FormField, FormFieldParams} from './form-field';
 import { Grid } from '@material-ui/core';
 import { FormControlParams, FormControl } from './form-control';
+import { InvalidFieldsInterface, RequestStateInterface } from '../../models/types';
 
-export function Form<FieldType>(fields: FormFieldParams<FieldType>[], controls: FormControlParams[]) {
+export function Form<FieldsInterface, Props, State extends (InvalidFieldsInterface<FieldsInterface> & RequestStateInterface<FieldsInterface>)>(fields: FormFieldParams<FieldsInterface, Props, State>[], controls: FormControlParams[]) {
     return (
         <form noValidate autoComplete='off'>
             <Grid
@@ -16,7 +17,7 @@ export function Form<FieldType>(fields: FormFieldParams<FieldType>[], controls: 
                 {/* field group */}
                 {fields.map(item => {
                     /* <item> is a parameter not a control so we need to wrap it into a control */
-                    return FormField<FieldType>(item);
+                    return FormField<FieldsInterface, Props, State>(item);
                 })}
 
                 {/* control group */}

@@ -4,10 +4,10 @@ import AccountsPageContainer from '../../components/accounts-page-container';
 import { Button, Grid } from '@material-ui/core';
 import { Form } from '../../components/forms/form';
 import { LoginAccountPOST } from '../../models/http-requests';
-import { FormFieldParams, handle_change_function_type, FormFieldMetadata } from '../../components/forms/form-field';
+import { FormFieldParams,  FormFieldMetadata } from '../../components/forms/form-field';
 import { LOGIN_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
 import { LinkControl } from '../../components/link-control';
-import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray, HistoryPropInterface } from '../../models/types';
+import { RequestStateInterface, NotificationStateInterface, HistoryPropInterface, InvalidFieldsInterface } from '../../models/types';
 import { ValidationService } from '../../services/validation-service';
 import { PageService } from '../../services/page-service';
 import { MODE, mode } from '../../App';
@@ -16,8 +16,7 @@ import { AccountsPageHeader } from '../../components/accounts-page-header';
 interface Props extends HistoryPropInterface {
 }
 
-interface State extends RequestStateInterface<LoginAccountPOST>, NotificationStateInterface {
-    invalid_fields: GenericNullKeyArray<LoginAccountPOST>;
+interface State extends RequestStateInterface<LoginAccountPOST>, NotificationStateInterface, InvalidFieldsInterface<LoginAccountPOST> {
 }
 
 const fields: FormFieldMetadata<LoginAccountPOST>[] = [
@@ -44,17 +43,6 @@ export default class LoginAccountPage extends React.Component<Props, State> {
         },
         invalid_fields: []
     };
-
-     // function to update state of field. bound to this component
-    private handleChange: handle_change_function_type<keyof LoginAccountPOST> = (id: keyof LoginAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
-    
-        if (event.target.value === '') {
-            this.setState({invalid_fields: this.state.invalid_fields.concat(id)});
-        } else {
-            this.setState({invalid_fields: this.state.invalid_fields.filter(function(element){return element !== id;})});
-        }
-    }
 
     private handleLoginAccount = () => {
         // temporary (for development builds only)
@@ -93,14 +81,14 @@ export default class LoginAccountPage extends React.Component<Props, State> {
                     <div>
                         { AccountsPageHeader() }
                         {Form(
-                            fields.map<FormFieldParams<LoginAccountPOST>>(item => {
+                            fields.map<FormFieldParams<LoginAccountPOST, Props, State>>(item => {
                                 return {
                                     metadata:       item,
                                     label:          HttpService.GetRequestDisplayName<LoginAccountPOST>(item.key),
                                     value:          this.state.request_data[item.key], 
-                                    handle_change:  this.handleChange, 
                                     type:           item.key === 'request_password' ? 'password' : 'text', 
-                                    error:          this.state.invalid_fields.includes(item.key)
+                                    error:          this.state.invalid_fields.includes(item.key),
+                                    parent:         this
                                 }
                             }), [
                                 {

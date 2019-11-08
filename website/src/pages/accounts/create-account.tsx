@@ -4,11 +4,11 @@ import AccountsPageContainer from '../../components/accounts-page-container';
 import { Notification, ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import { CreateAccountPOST } from '../../models/http-requests';
 import { CREATE_ACCOUNT_END_POINT, HttpService } from '../../services/http-service';
-import { FormFieldParams, FormFieldMetadata, handle_change_function_type } from '../../components/forms/form-field';
+import { FormFieldParams, FormFieldMetadata } from '../../components/forms/form-field';
 import { Form } from '../../components/forms/form';
 import { LinkControl } from '../../components/link-control';
 import { ValidationService } from '../../services/validation-service';
-import { RequestStateInterface, NotificationStateInterface, GenericNullKeyArray, HistoryPropInterface } from '../../models/types';
+import { RequestStateInterface, NotificationStateInterface, HistoryPropInterface, InvalidFieldsInterface } from '../../models/types';
 import { PageService } from '../../services/page-service';
 import { mode, MODE } from '../../App';
 import { AccountsPageHeader } from '../../components/accounts-page-header';
@@ -35,8 +35,7 @@ interface Props extends HistoryPropInterface {
  * State for this component. contains user data structure to store information
  * to create a new account
  */
-interface State extends NotificationStateInterface, RequestStateInterface<CreateAccountPOST> {
-    invalid_fields: GenericNullKeyArray<CreateAccountPOST>;
+interface State extends NotificationStateInterface, RequestStateInterface<CreateAccountPOST>, InvalidFieldsInterface<CreateAccountPOST> {
 };
 
 /**
@@ -64,18 +63,6 @@ export default class CreateAccountPage extends React.Component<Props, State> {
         invalid_fields: []
     };
 
-    // function to update state of field. bound to this component
-    private handleChange: handle_change_function_type<keyof CreateAccountPOST> = (id: keyof CreateAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) => { 
-        this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
-    
-        if (event.target.value === '') {
-            this.setState({invalid_fields: this.state.invalid_fields.concat(id)});
-        } else {
-            this.setState({invalid_fields: this.state.invalid_fields.filter(function(element){return element !== id;})});
-        }
-    }
-    
-    
     // function to handle creating an account from the values currently defined in state
     private handleCreateAccount = () => {
          // temporary (for development builds only)
@@ -113,14 +100,14 @@ export default class CreateAccountPage extends React.Component<Props, State> {
                 {AccountsPageContainer(
                     <div>
                         { AccountsPageHeader() }
-                        {Form(fields.map<FormFieldParams<CreateAccountPOST>>(item => {
+                        {Form(fields.map<FormFieldParams<CreateAccountPOST, Props, State>>(item => {
                              return {
                                 metadata:       item,
                                 label:          HttpService.GetRequestDisplayName<CreateAccountPOST>(item.key),
                                 value:          this.state.request_data[item.key],
-                                handle_change:  this.handleChange,
                                 error:          this.state.invalid_fields.includes(item.key),
-                                type:           item.key === 'request_password' ? 'password' : 'text'
+                                type:           item.key === 'request_password' ? 'password' : 'text',
+                                parent:         this
                             }
                         }), [{
                             content:        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={this.handleCreateAccount}>Create Account</Button>,

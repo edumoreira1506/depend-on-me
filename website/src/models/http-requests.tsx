@@ -52,3 +52,5 @@ export interface CreateAccountPOST extends HttpRequest, HttpPasswordField, HttpE
  * data structure of body for the login-account POST http request  
  */
 export interface LoginAccountPOST extends HttpRequest, HttpEmailField, HttpPasswordField { }
+
+export interface ForgotAccountPOST extends HttpRequest, HttpEmailField { }

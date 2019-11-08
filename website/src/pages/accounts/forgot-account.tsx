@@ -4,19 +4,19 @@ import { mode, MODE } from '../../App';
 import AccountsPageContainer from '../../components/accounts-page-container';
 import { AccountsPageHeader } from '../../components/accounts-page-header';
 import { Form } from '../../components/forms/form';
-import { FormFieldMetadata, FormFieldParams, handle_change_function_type } from '../../components/forms/form-field';
+import { FormFieldMetadata, FormFieldParams } from '../../components/forms/form-field';
 import { LinkControl } from '../../components/link-control';
 import { ShowNotification, NOTIFICATION_STYLE_DEFAULT } from '../../components/notification';
 import { ForgotAccountPOST } from '../../models/http-requests';
-import { HistoryPropInterface, NotificationStateInterface, RequestStateInterface, GenericNullKeyArray } from '../../models/types';
+import { HistoryPropInterface, NotificationStateInterface, RequestStateInterface, InvalidFieldsInterface } from '../../models/types';
 import { HttpService, FORGOT_ACCOUNT_END_POINT } from '../../services/http-service';
 import { PageService } from '../../services/page-service';
 import { ValidationService } from '../../services/validation-service';
 
 interface Props extends HistoryPropInterface {};
 
-interface State extends RequestStateInterface<ForgotAccountPOST>, NotificationStateInterface {
-    invalid_fields: GenericNullKeyArray<ForgotAccountPOST>;
+interface State extends RequestStateInterface<ForgotAccountPOST>, NotificationStateInterface, InvalidFieldsInterface<ForgotAccountPOST> {
+    // invalid_fields: GenericNullKeyArray<ForgotAccountPOST>;
 };
 
 /**
@@ -41,15 +41,15 @@ export class ForgotAccountPage extends React.Component<Props, State> {
         invalid_fields: []
     }
 
-    private handleChange: handle_change_function_type<keyof ForgotAccountPOST> = (id: keyof ForgotAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
+    // private handleChange: handle_change_function_type<keyof ForgotAccountPOST> = (id: keyof ForgotAccountPOST) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     this.setState({request_data: {...this.state.request_data, [id]: event.target.value}});
 
-        if (event.target.value === '') {
-            this.setState({invalid_fields: this.state.invalid_fields.concat(id)});
-        } else {
-            this.setState({invalid_fields: this.state.invalid_fields.filter(function(element){return element !== id;})});
-        }
-    }
+    //     if (event.target.value === '') {
+    //         this.setState({invalid_fields: this.state.invalid_fields.concat(id)});
+    //     } else {
+    //         this.setState({invalid_fields: this.state.invalid_fields.filter(function(element){return element !== id;})});
+    //     }
+    // }
 
     private handleForgotAccount = () => {
         // temporary (for development builds only)
@@ -84,14 +84,15 @@ export class ForgotAccountPage extends React.Component<Props, State> {
                 {AccountsPageContainer(
                     <div>
                         { AccountsPageHeader() }
-                        {Form(fields.map<FormFieldParams<ForgotAccountPOST>>(item => {
+                        {Form(fields.map<FormFieldParams<ForgotAccountPOST, Props, State>>(item => {
                             return {
                                 metadata:       item,
                                 label:          HttpService.GetRequestDisplayName<ForgotAccountPOST>(item.key),
                                 value:          this.state.request_data[item.key],
-                                handle_change:  this.handleChange,
+                                // handle_change:  this.handleChange,
                                 error:          this.state.invalid_fields.includes(item.key),
-                                type:           'text'
+                                type:           'text',
+                                parent:         this
                             }
                         }), [{
                             content:        <Button style={{boxShadow: "none"}} color='primary' variant='contained' fullWidth onClick={this.handleForgotAccount}>Recover Account</Button>,
